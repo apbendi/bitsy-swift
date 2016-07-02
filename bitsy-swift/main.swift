@@ -1,12 +1,7 @@
-//
-//  main.swift
-//  bitsy-swift
-//
-//  Created by Ben DiFrancesco on 7/1/16.
-//  Copyright © 2016 ScopeLift. All rights reserved.
-//
-
 import Foundation
 
-print("Hello, World!")
+let reader: CodeReader = CmdLineReader()
+let tokens = Tokenizer(code: reader.readCode())
+let parser = Parser(tokens: tokens)
 
+parser.parse()
