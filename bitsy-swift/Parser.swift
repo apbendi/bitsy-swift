@@ -37,6 +37,8 @@ private extension Parser {
             exit(-1)
         }
 
+        print(currentToken.value)
+
         let value = currentToken.value
         advanceToken()
         return value
@@ -64,7 +66,6 @@ private extension Parser {
     }
 
     func ifStatement() {
-        print(currentToken.type.rawValue)
         switch currentToken.type {
         case .ifP:
             match(tokenType: .ifP)
@@ -80,25 +81,27 @@ private extension Parser {
 
         block() // IF body
 
-        print("ENDIF")
+        if case .elseKey = currentToken.type {
+            match(tokenType: .elseKey)
+            block()
+        }
+
         match(tokenType: .end)
     }
 
     func assignment() {
-        let variable = match(tokenType: .variable)
-        print("VARIABLE \(variable)")
+        let _ = match(tokenType: .variable)
     }
 
     func term() {
-        let integer = match(tokenType: .integer)
-        print("INTEGER \(integer)")
+        let _ = match(tokenType: .integer)
     }
 }
 
 
 private extension Token {
     var isSkippable: Bool { return self.type == .whitespace }
-    var isBlockEnd: Bool { return self.type == .end }
+    var isBlockEnd: Bool { return self.type == .end || self.type == .elseKey }
 }
 
 private func isIf(type type:TokenType) -> Bool {
