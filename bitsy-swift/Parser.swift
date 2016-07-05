@@ -53,12 +53,35 @@ private extension Parser {
     func block() {
         while !currentToken.isBlockEnd {
             switch currentToken.type {
+            case isIf:
+                ifStatement()
             case .variable:
                 assignment()
             default:
                 term()
             }
         }
+    }
+
+    func ifStatement() {
+        print(currentToken.type.rawValue)
+        switch currentToken.type {
+        case .ifP:
+            match(tokenType: .ifP)
+        case .ifN:
+            match(tokenType: .ifN)
+        case .ifZ:
+            match(tokenType: .ifZ)
+        default:
+            fatalError()
+        }
+
+        term() // Conditional test
+
+        block() // IF body
+
+        print("ENDIF")
+        match(tokenType: .end)
     }
 
     func assignment() {
@@ -76,4 +99,12 @@ private extension Parser {
 private extension Token {
     var isSkippable: Bool { return self.type == .whitespace }
     var isBlockEnd: Bool { return self.type == .end }
+}
+
+private func isIf(type type:TokenType) -> Bool {
+    return type == .ifP || type == .ifZ || type == .ifN
+}
+
+private func ~=(pattern: (TokenType) -> (Bool), value: TokenType) -> Bool {
+    return pattern(value)
 }
