@@ -59,6 +59,12 @@ private extension Parser {
                 ifStatement()
             case .loop:
                 loop()
+            case .breakKey:
+                doBreak()
+            case .print:
+                doPrint()
+            case .read:
+                read()
             case .variable:
                 assignment()
             default:
@@ -95,6 +101,20 @@ private extension Parser {
         match(tokenType: .loop)
         block()
         match(tokenType: .end)
+    }
+
+    func doBreak() {
+        match(tokenType: .breakKey)
+    }
+
+    func doPrint() {
+        match(tokenType: .print)
+        term() // what to print
+    }
+
+    func read() {
+        match(tokenType: .read)
+        term() // what variable to read
     }
 
     func assignment() {
