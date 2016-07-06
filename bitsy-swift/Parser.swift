@@ -65,10 +65,8 @@ private extension Parser {
                 doPrint()
             case .read:
                 read()
-            case .variable:
-                assignment()
             default:
-                term()
+                assignment()
             }
         }
     }
@@ -85,7 +83,7 @@ private extension Parser {
             fatalError()
         }
 
-        term() // Conditional test
+        expression() // Conditional test
 
         block() // IF body
 
@@ -109,20 +107,56 @@ private extension Parser {
 
     func doPrint() {
         match(tokenType: .print)
-        term() // what to print
+        expression() // what to print
     }
 
     func read() {
         match(tokenType: .read)
-        term() // what variable to read
+        match(tokenType: .variable) // what variable to read
     }
 
     func assignment() {
-        let _ = match(tokenType: .variable)
+        match(tokenType: .variable)
+        match(tokenType: .assignment)
+        expression()
+    }
+
+    func expression() {
+        term()
+
+        while currentToken.isAdditionOperator {
+            match(tokenType: currentToken.type)
+            term()
+        }
     }
 
     func term() {
-        let _ = match(tokenType: .integer)
+        signedFactor()
+
+        while currentToken.isMultiplicationOperator {
+            match(tokenType: currentToken.type)
+            factor()
+        }
+    }
+
+    func signedFactor() {
+        if currentToken.isAdditionOperator {
+            match(tokenType: currentToken.type)
+        }
+
+        factor()
+    }
+
+    func factor() {
+        if case .integer = currentToken.type {
+            match(tokenType: .integer)
+        } else if case .variable = currentToken.type {
+            match(tokenType: .variable)
+        } else {
+            match(tokenType: .leftParen)
+            expression()
+            match(tokenType: .rightParen)
+        }
     }
 }
 
@@ -130,6 +164,8 @@ private extension Parser {
 private extension Token {
     var isSkippable: Bool { return self.type == .whitespace }
     var isBlockEnd: Bool { return self.type == .end || self.type == .elseKey }
+    var isAdditionOperator: Bool { return self.type == .plus || self.type == .minus }
+    var isMultiplicationOperator: Bool { return self.type == .multiply || self.type == .divide || self.type == .modulus }
 }
 
 private func isIf(type type:TokenType) -> Bool {

@@ -11,6 +11,7 @@ enum TokenType: String {
     case multiply   = "*"
     case divide     = "/"
     case modulus    = "%"
+    case assignment = "="
     case begin      = "BEGIN"
     case end        = "END"
     case ifP        = "IFP"
@@ -22,5 +23,5 @@ enum TokenType: String {
     case print      = "PRINT"
     case read       = "READ"
 
-    static var operators: [TokenType] = [.leftParen, .rightParen, .plus, .minus, .multiply, .divide, .modulus]
+    static var operators: [TokenType] = [.leftParen, .rightParen, .plus, .minus, .multiply, .divide, .modulus, .assignment]
 }
