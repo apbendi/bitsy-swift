@@ -30,6 +30,13 @@ private extension Tokenizer {
             } else {
                 return Variable(value: ident)
             }
+        case isOperator:
+            let opString = take(matching: isOperator)
+            guard let opChar = opString.characters.first, opToken = Operator(char: opChar) where opString.characters.count == 1 else {
+                fatalError("Illegal Operator: \(opString)")
+            }
+
+            return opToken
         default:
             fatalError("Illegal Character: \"\(codeStream.current)\"")
         }
@@ -48,16 +55,7 @@ private extension Tokenizer {
 }
 
 private func isWhitespace(char: Character) -> Bool {
-    switch char {
-    case "\n":
-        return true
-    case "\t":
-        return true
-    case " ":
-        return true
-    default:
-        return false
-    }
+    return char == "\n" || char == "\t" || char == " "
 }
 
 private func isNumber(char: Character) -> Bool {
@@ -67,6 +65,14 @@ private func isNumber(char: Character) -> Bool {
     default:
         return false
     }
+}
+
+private func isOperator(char: Character) -> Bool {
+    return TokenType.operators.map { op in
+                return String(char) == op.rawValue
+            }.reduce(false) { acc, doesMatch in
+                return acc || doesMatch
+            }
 }
 
 private func isIdent(char: Character) -> Bool {
