@@ -10,4 +10,5 @@ enum TokenType: String {
     case ifZ     = "IFZ"
     case ifN     = "IFN"
     case elseKey = "ELSE"
+    case loop    = "LOOP"
 }

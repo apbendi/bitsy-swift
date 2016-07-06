@@ -57,6 +57,8 @@ private extension Parser {
             switch currentToken.type {
             case isIf:
                 ifStatement()
+            case .loop:
+                loop()
             case .variable:
                 assignment()
             default:
@@ -86,6 +88,12 @@ private extension Parser {
             block()
         }
 
+        match(tokenType: .end)
+    }
+
+    func loop() {
+        match(tokenType: .loop)
+        block()
         match(tokenType: .end)
     }
 
