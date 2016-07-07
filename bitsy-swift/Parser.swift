@@ -2,9 +2,11 @@ import Foundation
 
 class Parser {
     private let tokens: Tokenizer
+    private let emitter: CodeEmitter
 
-    init(tokens: Tokenizer) {
+    init(tokens: Tokenizer, emitter: CodeEmitter) {
         self.tokens = tokens
+        self.emitter = emitter
 
         if currentToken.isSkippable {
             advanceToken()
@@ -13,6 +15,16 @@ class Parser {
 
     func parse() {
         program()
+    }
+}
+
+private extension Parser {
+    func emit(code: String) {
+        emitter.emit(code: code)
+    }
+
+    func emitLine(code: String) {
+        emit("\(code)\n")
     }
 }
 
@@ -37,7 +49,7 @@ private extension Parser {
             exit(-1)
         }
 
-        print(currentToken.value)
+        //print(currentToken.value)
 
         let value = currentToken.value
         advanceToken()
@@ -48,8 +60,25 @@ private extension Parser {
 private extension Parser {
     func program() {
         match(tokenType: .begin)
+
+        emitLine("// Compiler Output\n")
+        emitLine("struct Variables {")
+        emitLine("private var values: [String: Int] = [:]")
+        emitLine("subscript(index: String) -> Int {")
+        emitLine("get { guard let v = values[index] else { return 0 }; return v }")
+        emitLine("set (newValue) { values[index] = newValue } } }")
+        emitLine("var register: Int = 0")
+        emitLine("var variables = Variables()")
+        emitLine("func readIn() -> Int {")
+        emitLine("if let input = readLine(), intInput = Int(input) { return intInput")
+        emitLine("} else { return 0 } }")
+        emit("\n")
+
         block()
+
         match(tokenType: .end)
+
+        emitLine("\n// End Compiler Output")
     }
 
     func block() {

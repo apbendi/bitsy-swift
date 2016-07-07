@@ -14,6 +14,7 @@
 		B44ABF5C1D270F580012F25B /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44ABF5B1D270F580012F25B /* Token.swift */; };
 		B44ABF5E1D270FFB0012F25B /* Tokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44ABF5D1D270FFB0012F25B /* Tokenizer.swift */; };
 		B44ABF601D275F760012F25B /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44ABF5F1D275F760012F25B /* Parser.swift */; };
+		B4CEB1EF1D2EF99A0010AB4B /* Output.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4CEB1EE1D2EF99A0010AB4B /* Output.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -37,6 +38,7 @@
 		B44ABF5B1D270F580012F25B /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		B44ABF5D1D270FFB0012F25B /* Tokenizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tokenizer.swift; sourceTree = "<group>"; };
 		B44ABF5F1D275F760012F25B /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		B4CEB1EE1D2EF99A0010AB4B /* Output.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Output.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +73,7 @@
 			children = (
 				B44ABF4E1D2709010012F25B /* main.swift */,
 				B44ABF551D27098A0012F25B /* Input.swift */,
+				B4CEB1EE1D2EF99A0010AB4B /* Output.swift */,
 				B44ABF571D2709D60012F25B /* CharStream.swift */,
 				B44ABF591D270EE40012F25B /* TokenType.swift */,
 				B44ABF5B1D270F580012F25B /* Token.swift */,
@@ -137,6 +140,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B4CEB1EF1D2EF99A0010AB4B /* Output.swift in Sources */,
 				B44ABF5C1D270F580012F25B /* Token.swift in Sources */,
 				B44ABF5E1D270FFB0012F25B /* Tokenizer.swift in Sources */,
 				B44ABF581D2709D60012F25B /* CharStream.swift in Sources */,
@@ -265,6 +269,7 @@
 				B44ABF541D2709010012F25B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
