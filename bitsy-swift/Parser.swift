@@ -69,6 +69,7 @@ private extension Parser {
         emitLine("set (newValue) { values[index] = newValue } } }")
         emitLine("var register: Int = 0")
         emitLine("var variables = Variables()")
+        emitLine("var stack: [Int] = []")
         emitLine("func readIn() -> Int {")
         emitLine("if let input = readLine(), intInput = Int(input) { return intInput")
         emitLine("} else { return 0 } }")
@@ -145,17 +146,20 @@ private extension Parser {
     }
 
     func assignment() {
-        match(tokenType: .variable)
+        let varName = match(tokenType: .variable)
         match(tokenType: .assignment)
         expression()
+        emitLine("variables[\"\(varName)\"] = register")
     }
 
     func expression() {
         term()
 
         while currentToken.isAdditionOperator {
-            match(tokenType: currentToken.type)
+            emitLine("stack.append(register)")
+            let op = match(tokenType: currentToken.type)
             term()
+            emitLine("register = stack.removeLast() \(op) register")
         }
     }
 
@@ -163,24 +167,35 @@ private extension Parser {
         signedFactor()
 
         while currentToken.isMultiplicationOperator {
-            match(tokenType: currentToken.type)
+            emitLine("stack.append(register)")
+            let op = match(tokenType: currentToken.type)
             factor()
+            emitLine("register = stack.removeLast() \(op) register")
         }
     }
 
     func signedFactor() {
+        var shouldNegate = false
+
         if currentToken.isAdditionOperator {
+            shouldNegate = currentToken.type == .minus
             match(tokenType: currentToken.type)
         }
 
         factor()
+
+        if shouldNegate {
+            emitLine("register = -register")
+        }
     }
 
     func factor() {
         if case .integer = currentToken.type {
-            match(tokenType: .integer)
+            let integer = match(tokenType: .integer)
+            emitLine("register = \(integer)")
         } else if case .variable = currentToken.type {
-            match(tokenType: .variable)
+            let varName = match(tokenType: .variable)
+            emitLine("register = variables[\"\(varName)\"]")
         } else {
             match(tokenType: .leftParen)
             expression()
