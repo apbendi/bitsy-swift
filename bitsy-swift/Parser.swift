@@ -127,12 +127,17 @@ private extension Parser {
 
     func loop() {
         match(tokenType: .loop)
+        emitLine("while true {")
+
         block()
+
         match(tokenType: .end)
+        emitLine("}")
     }
 
     func doBreak() {
         match(tokenType: .breakKey)
+        emitLine("break")
     }
 
     func doPrint() {
