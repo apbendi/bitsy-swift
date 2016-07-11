@@ -142,12 +142,14 @@ private extension Parser {
 
     func doPrint() {
         match(tokenType: .print)
-        expression() // what to print
+        expression()
+        emitLine("print(register)")
     }
 
     func read() {
         match(tokenType: .read)
-        match(tokenType: .variable) // what variable to read
+        let varName = match(tokenType: .variable)
+        emitLine("variables[\"\(varName)\"] = readIn()")
     }
 
     func assignment() {
