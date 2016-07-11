@@ -102,27 +102,34 @@ private extension Parser {
     }
 
     func ifStatement() {
-        switch currentToken.type {
-        case .ifP:
-            match(tokenType: .ifP)
-        case .ifN:
-            match(tokenType: .ifN)
-        case .ifZ:
-            match(tokenType: .ifZ)
-        default:
-            fatalError()
+        func ifCode(type type: TokenType) -> String {
+            switch type {
+            case .ifP:
+                return ">"
+            case .ifN:
+                return "<"
+            case .ifZ:
+                return "=="
+            default:
+                fatalError("Unexpected non-IF code: \(type)")
+            }
         }
 
-        expression() // Conditional test
+        let codeOp = ifCode(type: currentToken.type)
+        match(tokenType: currentToken.type)
+        expression()
+        emitLine("if register \(codeOp) 0 {")
 
-        block() // IF body
+        block()
 
         if case .elseKey = currentToken.type {
             match(tokenType: .elseKey)
+            emitLine("} else { ")
             block()
         }
 
         match(tokenType: .end)
+        emitLine("}")
     }
 
     func loop() {
