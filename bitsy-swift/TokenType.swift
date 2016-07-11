@@ -23,5 +23,5 @@ enum TokenType: String {
     case print      = "PRINT"
     case read       = "READ"
 
-    static var operators: [TokenType] = [.leftParen, .rightParen, .plus, .minus, .multiply, .divide, .modulus, .assignment]
+    static var operators: [TokenType] = [.plus, .minus, .multiply, .divide, .modulus, .assignment]
 }

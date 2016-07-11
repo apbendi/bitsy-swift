@@ -23,6 +23,13 @@ private extension Tokenizer {
             return Whitespace(value: take(matching: isWhitespace))
         case isNumber:
             return Integer(value: take(matching: isNumber))
+        case isParen:
+            let parenChar = takeOne()
+            guard let parenToken = Paren(string: parenChar) else {
+                fatalError("Unexpected Paren String: \(parenChar)")
+            }
+
+            return parenToken
         case isIdent:
             let ident = take(matching: isIdent)
             if let key = Keyword(string: ident) {
@@ -42,12 +49,17 @@ private extension Tokenizer {
         }
     }
 
+    func takeOne() -> String {
+        let charString = String(codeStream.current)
+        codeStream.advance()
+        return charString
+    }
+
     func take(matching matches:(Character) -> Bool) -> String {
         var taken = ""
 
         while matches(codeStream.current) {
-            taken += String(codeStream.current)
-            codeStream.advance()
+            taken += takeOne()
         }
 
         return taken
@@ -65,6 +77,12 @@ private func isNumber(char: Character) -> Bool {
     default:
         return false
     }
+}
+
+private func isParen(char: Character) -> Bool {
+    let stringChar = String(char)
+    return stringChar == TokenType.leftParen.rawValue ||
+            stringChar == TokenType.rightParen.rawValue
 }
 
 private func isOperator(char: Character) -> Bool {

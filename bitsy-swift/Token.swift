@@ -15,6 +15,19 @@ struct Integer: Token {
     let value: String
 }
 
+struct Paren: Token {
+    let type: TokenType
+    var value: String { return type.rawValue }
+
+    init?(string: String) {
+        guard let type = TokenType(rawValue: string) else {
+            return nil
+        }
+
+        self.type = type
+    }
+}
+
 struct Operator: Token {
     let type: TokenType
     var value: String { return type.rawValue }
