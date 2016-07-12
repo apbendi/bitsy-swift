@@ -14,6 +14,9 @@
 		B44ABF5C1D270F580012F25B /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44ABF5B1D270F580012F25B /* Token.swift */; };
 		B44ABF5E1D270FFB0012F25B /* Tokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44ABF5D1D270FFB0012F25B /* Tokenizer.swift */; };
 		B44ABF601D275F760012F25B /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44ABF5F1D275F760012F25B /* Parser.swift */; };
+		B46B12F61D3596600037045F /* CommandLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B12F31D3596600037045F /* CommandLine.swift */; };
+		B46B12F71D3596600037045F /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B12F41D3596600037045F /* Option.swift */; };
+		B46B12F81D3596600037045F /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B12F51D3596600037045F /* StringExtensions.swift */; };
 		B4CEB1EF1D2EF99A0010AB4B /* Output.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4CEB1EE1D2EF99A0010AB4B /* Output.swift */; };
 /* End PBXBuildFile section */
 
@@ -38,6 +41,9 @@
 		B44ABF5B1D270F580012F25B /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		B44ABF5D1D270FFB0012F25B /* Tokenizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tokenizer.swift; sourceTree = "<group>"; };
 		B44ABF5F1D275F760012F25B /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		B46B12F31D3596600037045F /* CommandLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandLine.swift; sourceTree = "<group>"; };
+		B46B12F41D3596600037045F /* Option.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
+		B46B12F51D3596600037045F /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		B4CEB1EE1D2EF99A0010AB4B /* Output.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Output.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -79,8 +85,27 @@
 				B44ABF5B1D270F580012F25B /* Token.swift */,
 				B44ABF5D1D270FFB0012F25B /* Tokenizer.swift */,
 				B44ABF5F1D275F760012F25B /* Parser.swift */,
+				B46B12F11D3595C80037045F /* vendor */,
 			);
 			path = "bitsy-swift";
+			sourceTree = "<group>";
+		};
+		B46B12F11D3595C80037045F /* vendor */ = {
+			isa = PBXGroup;
+			children = (
+				B46B12F21D3595EE0037045F /* CommandLine */,
+			);
+			path = vendor;
+			sourceTree = "<group>";
+		};
+		B46B12F21D3595EE0037045F /* CommandLine */ = {
+			isa = PBXGroup;
+			children = (
+				B46B12F31D3596600037045F /* CommandLine.swift */,
+				B46B12F41D3596600037045F /* Option.swift */,
+				B46B12F51D3596600037045F /* StringExtensions.swift */,
+			);
+			path = CommandLine;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -142,10 +167,13 @@
 			files = (
 				B4CEB1EF1D2EF99A0010AB4B /* Output.swift in Sources */,
 				B44ABF5C1D270F580012F25B /* Token.swift in Sources */,
+				B46B12F71D3596600037045F /* Option.swift in Sources */,
 				B44ABF5E1D270FFB0012F25B /* Tokenizer.swift in Sources */,
 				B44ABF581D2709D60012F25B /* CharStream.swift in Sources */,
 				B44ABF5A1D270EE40012F25B /* TokenType.swift in Sources */,
+				B46B12F81D3596600037045F /* StringExtensions.swift in Sources */,
 				B44ABF561D27098A0012F25B /* Input.swift in Sources */,
+				B46B12F61D3596600037045F /* CommandLine.swift in Sources */,
 				B44ABF4F1D2709010012F25B /* main.swift in Sources */,
 				B44ABF601D275F760012F25B /* Parser.swift in Sources */,
 			);
