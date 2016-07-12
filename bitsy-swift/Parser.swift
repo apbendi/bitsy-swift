@@ -220,7 +220,7 @@ private extension Parser {
 
 
 private extension Token {
-    var isSkippable: Bool { return self.type == .whitespace }
+    var isSkippable: Bool { return self.type == .whitespace || self.type == .comment }
     var isBlockEnd: Bool { return self.type == .end || self.type == .elseKey }
     var isAdditionOperator: Bool { return self.type == .plus || self.type == .minus }
     var isMultiplicationOperator: Bool { return self.type == .multiply || self.type == .divide || self.type == .modulus }

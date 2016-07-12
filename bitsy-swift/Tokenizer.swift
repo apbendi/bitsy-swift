@@ -1,5 +1,8 @@
 import Foundation
 
+private let CommentOpen = Character("{")
+private let CommentClose = Character("}")
+
 class Tokenizer {
     private var codeStream: CharStream
     private(set) internal var current: Token = Variable(value: "placeholder")
@@ -17,6 +20,7 @@ class Tokenizer {
 }
 
 private extension Tokenizer {
+
     func takeNext() -> Token {
         switch codeStream.current {
         case isWhitespace:
@@ -44,6 +48,8 @@ private extension Tokenizer {
             }
 
             return opToken
+        case CommentOpen:
+            return skipComment()
         default:
             fatalError("Illegal Character: \"\(codeStream.current)\"")
         }
@@ -63,6 +69,23 @@ private extension Tokenizer {
         }
 
         return taken
+    }
+
+    func skipComment() -> Token {
+        let openChar = takeOne()
+        guard openChar == String(CommentOpen) else {
+            fatalError("Error processing comment, received: \(openChar) when expecting \(CommentOpen)")
+        }
+
+        var commentText = ""
+
+        while codeStream.current != CommentClose {
+            commentText += takeOne()
+        }
+
+        takeOne() // CommentClose
+
+        return Comment(value: commentText)
     }
 }
 

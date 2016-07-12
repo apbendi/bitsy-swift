@@ -4,6 +4,7 @@ enum TokenType: String {
     case whitespace
     case variable
     case integer
+    case comment
     case leftParen  = "("
     case rightParen = ")"
     case plus       = "+"

@@ -15,6 +15,11 @@ struct Integer: Token {
     let value: String
 }
 
+struct Comment: Token {
+    let type: TokenType = .comment
+    let value: String
+}
+
 struct Paren: Token {
     let type: TokenType
     var value: String { return type.rawValue }
