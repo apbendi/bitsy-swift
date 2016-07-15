@@ -17,6 +17,7 @@
 		B46B12F61D3596600037045F /* CommandLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B12F31D3596600037045F /* CommandLine.swift */; };
 		B46B12F71D3596600037045F /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B12F41D3596600037045F /* Option.swift */; };
 		B46B12F81D3596600037045F /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B12F51D3596600037045F /* StringExtensions.swift */; };
+		B46B12FA1D3886DF0037045F /* ArgumentConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B12F91D3886DF0037045F /* ArgumentConfig.swift */; };
 		B4CEB1EF1D2EF99A0010AB4B /* Output.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4CEB1EE1D2EF99A0010AB4B /* Output.swift */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +45,7 @@
 		B46B12F31D3596600037045F /* CommandLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandLine.swift; sourceTree = "<group>"; };
 		B46B12F41D3596600037045F /* Option.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
 		B46B12F51D3596600037045F /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		B46B12F91D3886DF0037045F /* ArgumentConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArgumentConfig.swift; sourceTree = "<group>"; };
 		B4CEB1EE1D2EF99A0010AB4B /* Output.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Output.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -78,6 +80,7 @@
 			isa = PBXGroup;
 			children = (
 				B44ABF4E1D2709010012F25B /* main.swift */,
+				B46B12F91D3886DF0037045F /* ArgumentConfig.swift */,
 				B44ABF551D27098A0012F25B /* Input.swift */,
 				B4CEB1EE1D2EF99A0010AB4B /* Output.swift */,
 				B44ABF571D2709D60012F25B /* CharStream.swift */,
@@ -173,6 +176,7 @@
 				B44ABF5A1D270EE40012F25B /* TokenType.swift in Sources */,
 				B46B12F81D3596600037045F /* StringExtensions.swift in Sources */,
 				B44ABF561D27098A0012F25B /* Input.swift in Sources */,
+				B46B12FA1D3886DF0037045F /* ArgumentConfig.swift in Sources */,
 				B46B12F61D3596600037045F /* CommandLine.swift in Sources */,
 				B44ABF4F1D2709010012F25B /* main.swift in Sources */,
 				B44ABF601D275F760012F25B /* Parser.swift in Sources */,

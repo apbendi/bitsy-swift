@@ -22,3 +22,20 @@ struct CmdLineReader: CodeReader {
         return CharStream(string: input)
     }
 }
+
+struct FileReader: CodeReader {
+    private let filePath: String
+
+    init(filePath path: String) {
+        self.filePath =  path
+    }
+
+    func readCode() -> CharStream {
+        guard let code = try? NSString(contentsOfFile: filePath, encoding: NSUTF8StringEncoding) as String else {
+            print("Path to bitsy code was not valid (\(filePath))")
+            exit(EX_NOINPUT)
+        }
+
+        return CharStream(string: code)
+    }
+}
