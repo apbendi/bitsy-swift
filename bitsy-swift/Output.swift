@@ -17,12 +17,14 @@ class FileEmitter: CodeEmitter {
     private let finalPath: String
     private let intermediatePath: String
     private let retainIntermediate: Bool
+    private let runDeleteBinary: Bool
     private var code: String = ""
 
-    init(filePath path: String, retainIntermediate retain: Bool = false) {
+    init(filePath path: String, retainIntermediate retain: Bool = false, runDeleteBinary runDelete: Bool = false) {
         finalPath = path
         intermediatePath = finalPath + ".swift"
         retainIntermediate = retain
+        runDeleteBinary = runDelete
     }
 
     func emit(code newCode: String) {
@@ -41,12 +43,19 @@ class FileEmitter: CodeEmitter {
             exit(EX_IOERR)
         }
 
-        if retainIntermediate {
-            return
+        if !retainIntermediate {
+            delete(filePath: intermediatePath)
         }
 
-        do {
-            try NSFileManager.defaultManager().removeItemAtPath(intermediatePath)
-        } catch _ { }
+        if runDeleteBinary {
+            let bitsyOut = exec("./\(finalPath)")
+            print(bitsyOut, terminator: "")
+
+            delete(filePath: finalPath)
+        }
+    }
+
+    private func delete(filePath filePath:String) {
+        let _ = try? NSFileManager.defaultManager().removeItemAtPath(filePath)
     }
 }
