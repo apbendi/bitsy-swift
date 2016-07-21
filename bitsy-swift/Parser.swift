@@ -43,13 +43,15 @@ private extension Parser {
         }
     }
 
-    func match(tokenType type: TokenType) -> String {
+    func match(tokenType type: TokenType, andTerminate terminate: Bool = false) -> String {
         guard currentToken.type == type else {
             print("[ERROR] Expecting \(type.rawValue) but received \(currentToken.value)")
-            exit(-1)
+            exit(EX_DATAERR)
         }
 
-        //print(currentToken.value)
+        if terminate {
+            return currentToken.value
+        }
 
         let value = currentToken.value
         advanceToken()
@@ -77,7 +79,7 @@ private extension Parser {
 
         block()
 
-        match(tokenType: .end)
+        match(tokenType: .end, andTerminate: true)
 
         emitLine("\n// End Compiler Output")
     }
