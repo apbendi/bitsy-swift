@@ -2,11 +2,11 @@ import Foundation
 
 class Parser {
     private let tokens: Tokenizer
-    private let emitter: CodeEmitter
+    private let generator: CodeGenerator
 
-    init(tokens: Tokenizer, emitter: CodeEmitter) {
+    init(tokens: Tokenizer, generator: CodeGenerator) {
         self.tokens = tokens
-        self.emitter = emitter
+        self.generator = generator
 
         if currentToken.isSkippable {
             advanceToken()
@@ -15,16 +15,6 @@ class Parser {
 
     func parse() {
         program()
-    }
-}
-
-private extension Parser {
-    func emit(code: String) {
-        emitter.emit(code: code)
-    }
-
-    func emitLine(code: String) {
-        emit("\(code)\n")
     }
 }
 
@@ -60,28 +50,45 @@ private extension Parser {
 }
 
 private extension Parser {
+
+    static func ifCond(forTokenType type: TokenType) -> CodeGenCondition {
+        switch type {
+        case .ifP:
+            return .positive
+        case .ifN:
+            return .negative
+        case .ifZ:
+            return .zero
+        default:
+            fatalError("Unexpected non-IF code: \(type)")
+        }
+    }
+
+    static func codeOp(forTokenType type: TokenType) -> CodeGenOperation {
+        switch type {
+        case .plus:
+            return .add
+        case .minus:
+            return .subtract
+        case .multiply:
+            return .multiply
+        case .divide:
+            return .divide
+        case .modulus:
+            return .modulus
+        default:
+            fatalError("Unexpected non-Operator code: \(type)")
+        }
+    }
+}
+
+private extension Parser {
     func program() {
         match(tokenType: .begin)
-
-        emitLine("// Compiler Output\n")
-        emitLine("struct Variables {")
-        emitLine("private var values: [String: Int] = [:]")
-        emitLine("subscript(index: String) -> Int {")
-        emitLine("get { guard let v = values[index] else { return 0 }; return v }")
-        emitLine("set (newValue) { values[index] = newValue } } }")
-        emitLine("var register: Int = 0")
-        emitLine("var variables = Variables()")
-        emitLine("var stack: [Int] = []")
-        emitLine("func readIn() -> Int {")
-        emitLine("if let input = readLine(), intInput = Int(input) { return intInput")
-        emitLine("} else { return 0 } }")
-        emit("\n")
-
+        generator.header()
         block()
-
         match(tokenType: .end, andTerminate: true)
-
-        emitLine("\n// End Compiler Output")
+        generator.footer()
     }
 
     func block() {
@@ -104,78 +111,65 @@ private extension Parser {
     }
 
     func ifStatement() {
-        func ifCode(type type: TokenType) -> String {
-            switch type {
-            case .ifP:
-                return ">"
-            case .ifN:
-                return "<"
-            case .ifZ:
-                return "=="
-            default:
-                fatalError("Unexpected non-IF code: \(type)")
-            }
-        }
-
-        let codeOp = ifCode(type: currentToken.type)
+        let condType = Parser.ifCond(forTokenType: currentToken.type)
         match(tokenType: currentToken.type)
         expression()
-        emitLine("if register \(codeOp) 0 {")
-
+        generator.startCond(type: condType)
         block()
 
         if case .elseKey = currentToken.type {
             match(tokenType: .elseKey)
-            emitLine("} else { ")
+            generator.elseCond()
             block()
         }
 
         match(tokenType: .end)
-        emitLine("}")
+        generator.endCond()
     }
 
     func loop() {
         match(tokenType: .loop)
-        emitLine("while true {")
+        generator.loopOpen()
 
         block()
 
         match(tokenType: .end)
-        emitLine("}")
+        generator.loopEnd()
     }
 
     func doBreak() {
         match(tokenType: .breakKey)
-        emitLine("break")
+        generator.breakLoop()
     }
 
     func doPrint() {
         match(tokenType: .print)
         expression()
-        emitLine("print(register)")
+        generator.print()
     }
 
     func read() {
         match(tokenType: .read)
         let varName = match(tokenType: .variable)
-        emitLine("variables[\"\(varName)\"] = readIn()")
+        generator.read(variableName: varName)
     }
 
     func assignment() {
         let varName = match(tokenType: .variable)
         match(tokenType: .assignment)
         expression()
-        emitLine("variables[\"\(varName)\"] = register")
+        generator.set(variableName: varName)
     }
 
     func expression() {
         term()
 
         while currentToken.isAdditionOperator {
-            emitLine("stack.append(register)")
-            let op = match(tokenType: currentToken.type)
+            generator.push()
+            let op = Parser.codeOp(forTokenType: currentToken.type)
+            match(tokenType: currentToken.type)
             term()
-            emitLine("register = stack.removeLast() \(op) register")
+            generator.pop(andPerform: op)
         }
     }
 
@@ -183,35 +177,36 @@ private extension Parser {
         signedFactor()
 
         while currentToken.isMultiplicationOperator {
-            emitLine("stack.append(register)")
-            let op = match(tokenType: currentToken.type)
+            generator.push()
+            let op = Parser.codeOp(forTokenType: currentToken.type)
+            match(tokenType: currentToken.type)
             factor()
-            emitLine("register = stack.removeLast() \(op) register")
+            generator.pop(andPerform: op)
         }
     }
 
     func signedFactor() {
-        var shouldNegate = false
+        var op: CodeGenOperation = .add
 
         if currentToken.isAdditionOperator {
-            shouldNegate = currentToken.type == .minus
+            op = Parser.codeOp(forTokenType: currentToken.type)
             match(tokenType: currentToken.type)
         }
 
         factor()
 
-        if shouldNegate {
-            emitLine("register = -register")
+        if op == .subtract {
+            generator.negate()
         }
     }
 
     func factor() {
         if case .integer = currentToken.type {
             let integer = match(tokenType: .integer)
-            emitLine("register = \(integer)")
+            generator.load(integerValue: integer)
         } else if case .variable = currentToken.type {
             let varName = match(tokenType: .variable)
-            emitLine("register = variables[\"\(varName)\"]")
+            generator.load(variableName: varName)
         } else {
             match(tokenType: .leftParen)
             expression()

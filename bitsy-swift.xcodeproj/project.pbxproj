@@ -19,6 +19,7 @@
 		B46B12F81D3596600037045F /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B12F51D3596600037045F /* StringExtensions.swift */; };
 		B46B12FA1D3886DF0037045F /* ArgumentConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B12F91D3886DF0037045F /* ArgumentConfig.swift */; };
 		B46B12FC1D388C620037045F /* Exec.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B12FB1D388C620037045F /* Exec.swift */; };
+		B4C99B291D418469003DDDD0 /* CodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C99B281D418469003DDDD0 /* CodeGenerator.swift */; };
 		B4CEB1EF1D2EF99A0010AB4B /* Output.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4CEB1EE1D2EF99A0010AB4B /* Output.swift */; };
 /* End PBXBuildFile section */
 
@@ -48,6 +49,7 @@
 		B46B12F51D3596600037045F /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		B46B12F91D3886DF0037045F /* ArgumentConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArgumentConfig.swift; sourceTree = "<group>"; };
 		B46B12FB1D388C620037045F /* Exec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Exec.swift; sourceTree = "<group>"; };
+		B4C99B281D418469003DDDD0 /* CodeGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeGenerator.swift; sourceTree = "<group>"; };
 		B4CEB1EE1D2EF99A0010AB4B /* Output.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Output.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -90,6 +92,7 @@
 				B44ABF5B1D270F580012F25B /* Token.swift */,
 				B44ABF5D1D270FFB0012F25B /* Tokenizer.swift */,
 				B44ABF5F1D275F760012F25B /* Parser.swift */,
+				B4C99B281D418469003DDDD0 /* CodeGenerator.swift */,
 				B46B12F11D3595C80037045F /* vendor */,
 			);
 			path = "bitsy-swift";
@@ -182,6 +185,7 @@
 				B44ABF561D27098A0012F25B /* Input.swift in Sources */,
 				B46B12FA1D3886DF0037045F /* ArgumentConfig.swift in Sources */,
 				B46B12F61D3596600037045F /* CommandLine.swift in Sources */,
+				B4C99B291D418469003DDDD0 /* CodeGenerator.swift in Sources */,
 				B44ABF4F1D2709010012F25B /* main.swift in Sources */,
 				B44ABF601D275F760012F25B /* Parser.swift in Sources */,
 			);
