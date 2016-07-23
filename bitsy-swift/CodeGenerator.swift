@@ -1,5 +1,16 @@
 import Foundation
 
+protocol IntermediateBuilder {
+    func buildCommand(forFinalPath path: String) -> String
+    var intermediateExtension: String { get }
+}
+
+extension IntermediateBuilder {
+    func intermediatePath(forFinalPath path: String) -> String {
+        return path + intermediateExtension
+    }
+}
+
 enum CodeGenOperation {
     case add, subtract, multiply, divide, modulus
 }
@@ -8,7 +19,7 @@ enum CodeGenCondition {
     case positive, negative, zero
 }
 
-protocol CodeGenerator {
+protocol CodeGenerator: IntermediateBuilder {
     var emitter: CodeEmitter { get }
     func header()
     func footer()
@@ -40,6 +51,7 @@ extension CodeGenerator {
 
 struct SwiftGenerator: CodeGenerator {
     let emitter: CodeEmitter
+    let intermediateExtension = ".swift"
 
     init(emitter: CodeEmitter) {
         self.emitter = emitter
@@ -145,5 +157,9 @@ struct SwiftGenerator: CodeGenerator {
 
     func negate() {
         emitLine("register = -register")
+    }
+
+    func buildCommand(forFinalPath path: String) -> String {
+        return "swiftc \(intermediatePath(forFinalPath: path)) -o \(path) -suppress-warnings"
     }
 }

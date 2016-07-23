@@ -1,8 +1,8 @@
 import Foundation
 
 protocol CodeEmitter {
-    func emit(code code: String);
-    func finalize();
+    func emit(code code: String)
+    func finalize(withIntermediate builder: IntermediateBuilder)
 }
 
 struct CmdLineEmitter: CodeEmitter {
@@ -10,19 +10,17 @@ struct CmdLineEmitter: CodeEmitter {
         print(code, terminator: "")
     }
 
-    func finalize() {}
+    func finalize(withIntermediate builder: IntermediateBuilder) {}
 }
 
 class FileEmitter: CodeEmitter {
-    private let finalPath: String
-    private let intermediatePath: String
     private let retainIntermediate: Bool
     private let runDeleteBinary: Bool
+    private let finalPath: String
     private var code: String = ""
 
     init(filePath path: String, retainIntermediate retain: Bool = false, runDeleteBinary runDelete: Bool = false) {
         finalPath = path
-        intermediatePath = finalPath + ".swift"
         retainIntermediate = retain
         runDeleteBinary = runDelete
     }
@@ -31,10 +29,13 @@ class FileEmitter: CodeEmitter {
         self.code += newCode
     }
 
-    func finalize() {
+    func finalize(withIntermediate builder: IntermediateBuilder) {
+        let intermediatePath = builder.intermediatePath(forFinalPath: finalPath)
+        let buildCommand = builder.buildCommand(forFinalPath: finalPath)
+
         do {
             try code.writeToFile(intermediatePath, atomically: true, encoding: NSUTF8StringEncoding)
-            let swiftcOutput = exec("swiftc \(intermediatePath) -o \(finalPath) -suppress-warnings")
+            let swiftcOutput = exec(buildCommand)
             if swiftcOutput != "" {
                 print(swiftcOutput)
             }
