@@ -2,7 +2,6 @@ import Foundation
 
 struct ArgumentConfig {
     let reader: CodeReader
-    let emitter: CodeEmitter
     let generator: CodeGenerator
 
     init() {
@@ -34,7 +33,7 @@ struct ArgumentConfig {
 
         ArgumentConfig.check(version: version)
         reader = ArgumentConfig.reader(freeArgs: cli.unparsedArguments, cliInput: cliInput)
-        emitter = ArgumentConfig.emitter(outputPath: outputPath, cliOutput: cliOutput, retain: shouldRetain, runDelete: shouldRunDelete)
+        let emitter = ArgumentConfig.emitter(outputPath: outputPath, cliOutput: cliOutput, retain: shouldRetain, runDelete: shouldRunDelete)
         generator = SwiftGenerator(emitter: emitter)
     }
 }

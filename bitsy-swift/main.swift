@@ -2,8 +2,12 @@ import Foundation
 
 let config = ArgumentConfig()
 
-let tokens = Tokenizer(code: config.reader.readCode())
-let parser = Parser(tokens: tokens, generator: config.generator)
+let reader    = config.reader
+let generator = config.generator
+let emitter   = generator.emitter
+
+let tokens = Tokenizer(code: reader.readCode())
+let parser = Parser(tokens: tokens, generator: generator)
 
 parser.parse()
-config.emitter.finalize(withIntermediate: config.generator)
+emitter.finalize(withIntermediate: generator)
