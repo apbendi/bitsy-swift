@@ -1,0 +1,20 @@
+{ Calculate the greatest common denominator between two postive integers }
+BEGIN
+  intOne = 24
+  intTwo = 54
+
+  IFP intOne - intTwo
+    counter = intOne
+  ELSE
+    counter = intTwo
+  END
+
+  LOOP
+    IFZ intOne % counter {and} IFZ intTwo % counter
+      PRINT counter
+      BREAK
+    END {/and} END
+
+    counter = counter - 1
+  END
+END

@@ -1,0 +1,22 @@
+{ Print the Collatzy sequence for a given starting integer }
+BEGIN
+  collatzOf = 7
+
+  IFP collatzOf
+    n = collatzOf
+
+    LOOP
+      IFZ n - 1
+        BREAK
+      END
+
+      IFZ n % 2
+        n = n / 2
+      ELSE
+        n = 3*n + 1
+      END
+
+      PRINT n
+    END
+  END
+END

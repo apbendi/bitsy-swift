@@ -8,7 +8,7 @@ fi
 
 BITSYPATH=bin
 BITSYNAME=bitsy-swift
-RUNARG=--run-delete
+RUNARG="--run-delete"
 
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 BITSYBIN=$SCRIPTPATH/$BITSYPATH/$BITSYNAME
