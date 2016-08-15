@@ -4,8 +4,8 @@ struct ArgumentConfig {
     let reader: CodeReader
     let generator: CodeGenerator
 
-    init() {
-        let version = CounterOption(shortFlag: "v", longFlag: "version", helpMessage: "Print the version of bitsy-swift")
+    init(version: String) {
+        let versionArg = CounterOption(shortFlag: "v", longFlag: "version", helpMessage: "Print the version of bitsy-swift")
         let help = CounterOption(shortFlag: "h", longFlag: "help", helpMessage: "Display bitsy-swift usage")
         let cliInput = CounterOption(shortFlag: "c", longFlag:"read-cli", helpMessage: "Read Bitsy code from the command line, terminated by a '.'")
         let outputPath = StringOption(shortFlag: "o", longFlag:"output", helpMessage: "Specify a name for the binary output")
@@ -14,7 +14,7 @@ struct ArgumentConfig {
         let retainIntermediate = CounterOption(shortFlag: "i", longFlag: "retain-intermediate", helpMessage: "Retain results of intermediate representation")
 
         let cli = CommandLine()
-        cli.addOptions(version, help, cliInput, outputPath, cliOutput, runDelete, retainIntermediate)
+        cli.addOptions(versionArg, help, cliInput, outputPath, cliOutput, runDelete, retainIntermediate)
 
         do {
             try cli.parse()
@@ -31,7 +31,7 @@ struct ArgumentConfig {
         let shouldRunDelete = runDelete.value > 0
         let shouldRetain = retainIntermediate.value > 0
 
-        ArgumentConfig.check(version: version)
+        ArgumentConfig.check(argument: versionArg, version: version)
         reader = ArgumentConfig.reader(freeArgs: cli.unparsedArguments, cliInput: cliInput)
         let emitter = ArgumentConfig.emitter(outputPath: outputPath, cliOutput: cliOutput, retain: shouldRetain, runDelete: shouldRunDelete)
         generator = SwiftGenerator(emitter: emitter)
@@ -39,9 +39,9 @@ struct ArgumentConfig {
 }
 
 private extension ArgumentConfig {
-    static func check(version version:CounterOption) {
-        if version.value > 0 {
-            print("0.0.1")
+    static func check(argument arg:CounterOption, version: String) {
+        if arg.value > 0 {
+            print(version)
             exit(EX_OK)
         }
     }

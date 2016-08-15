@@ -1,6 +1,7 @@
 import Foundation
 
-let config = ArgumentConfig()
+let BitsyVersion = "0.1.0"
+let config = ArgumentConfig(version: BitsyVersion)
 
 let reader    = config.reader
 let generator = config.generator
