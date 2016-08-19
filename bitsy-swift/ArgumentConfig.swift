@@ -1,9 +1,29 @@
 import Foundation
 
+/**
+ *  Exposes concrete instances of components needed for compilation,
+ *  based on the arguments passed by the user on the command line.
+ *  Will exit process if user arguments are invalid.
+ */
 struct ArgumentConfig {
+    /**
+     * Concrete CodeReader per user command line configuration
+     */
     let reader: CodeReader
+
+    /**
+     *  Concrete CodeGenerator per user command line configuration
+     */
     let generator: CodeGenerator
 
+    /**
+     *  Parse the arguments passed by the user and return
+     *  an instance exposing concrete instances of components needed for
+     *  the compilation process. Exit process with message to user if
+     *  arguments are invalid
+     *
+     * - parameter version: The version string to report to the user if requested
+     */
     init(version: String) {
         let versionArg = CounterOption(shortFlag: "v", longFlag: "version", helpMessage: "Print the version of bitsy-swift")
         let help = CounterOption(shortFlag: "h", longFlag: "help", helpMessage: "Display bitsy-swift usage")
@@ -38,7 +58,13 @@ struct ArgumentConfig {
     }
 }
 
+// MARK: Static Helpers
+
 private extension ArgumentConfig {
+
+    /**
+     * Exit reporting the version if requested by user
+     */
     static func check(argument arg:CounterOption, version: String) {
         if arg.value > 0 {
             print(version)
@@ -46,6 +72,10 @@ private extension ArgumentConfig {
         }
     }
 
+    /**
+     *  Instantiate a concrete CodeReader based on the CLI input by user.
+     *  Exit with message to user if input is invalid or source cannot be read.
+     */
     static func reader(freeArgs freeArgs: [String], cliInput: CounterOption) -> CodeReader {
         if cliInput.value > 0 {
             return CmdLineReader()
@@ -59,6 +89,9 @@ private extension ArgumentConfig {
         return FileReader(filePath: filePath)
     }
 
+    /**
+     *  Return a configured concrete CodeEmitter base on the CLI input by user
+     */
     static func emitter(outputPath output:StringOption, cliOutput: CounterOption, retain: Bool, runDelete: Bool) -> CodeEmitter {
         if cliOutput.value > 0 {
             return CmdLineEmitter()
