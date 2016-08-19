@@ -43,6 +43,10 @@ extension CodeGenerator {
     func emitLine(code: String = "") {
         emitter.emit(code: "\(code)\n")
     }
+
+    func finalize() {
+        emitter.finalize(withIntermediate: self)
+    }
 }
 
 struct SwiftGenerator: CodeGenerator {
