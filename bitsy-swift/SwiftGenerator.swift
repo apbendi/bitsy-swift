@@ -1,5 +1,10 @@
 import Foundation
 
+// MARK: CodeGenerator
+
+/**
+ *  A concrete CodeGenerator which emits Swift code
+ */
 struct SwiftGenerator: CodeGenerator {
 
     let emitter: CodeEmitter
