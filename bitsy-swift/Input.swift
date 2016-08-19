@@ -1,9 +1,20 @@
 import Foundation
 
+/**
+ * Reads characters representing code from some location
+ */
 protocol CodeReader {
+
+    /**
+     *  Read code from a given source and return stream of Characters
+     */
     func readCode() -> CharStream
 }
 
+/**
+ *  Concrete CodeReader that takes arbitrary user input from STDIN
+ *  until receiving a terminating '.' line
+ */
 struct CmdLineReader: CodeReader {
     func readCode() -> CharStream {
         var input = ""
@@ -23,6 +34,11 @@ struct CmdLineReader: CodeReader {
     }
 }
 
+/**
+ *  Concrete CodeReader which loads characters from a given file on
+ *  disk, or Exits with an error to the user if the contents of the file
+ *  fail to read
+ */
 struct FileReader: CodeReader {
     private let filePath: String
 

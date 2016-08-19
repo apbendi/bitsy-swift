@@ -1,10 +1,33 @@
 import Foundation
 
+/**
+ *  Emits target code to a given location
+ */
 protocol CodeEmitter {
+
+    /**
+     * Append code to the output buffer for the compilation target
+     *
+     * - parameter code: The code to append to the buffer
+     */
     func emit(code code: String)
+
+    /**
+     * Finalize the code in the output buffer and perform any further transformations
+     * to the compilation target to produce a binary
+     *
+     * - parameter withIntermediate: Concrete builder for performing any external build step
+     *   require by a given compilation target language
+     */
     func finalize(withIntermediate builder: IntermediateBuilder)
 }
 
+/**
+ *  Concrete CodeEmitter for writing compilation target code to console on STDOUT
+ *
+ *  - warning: does not perform any finalization/build. useful for understanding
+ *       or debugging intermediate target
+ */
 struct CmdLineEmitter: CodeEmitter {
     func emit(code code: String) {
         print(code, terminator: "")
@@ -13,12 +36,28 @@ struct CmdLineEmitter: CodeEmitter {
     func finalize(withIntermediate builder: IntermediateBuilder) {}
 }
 
+/**
+ *  Concrete CodeEmitter for writing compilation target to a file on disk and
+ *  subsequently performing any required build step on that output to produce an
+ *  an executable binary. Cleans up the
+ *  intermediate target unless instructed otherwise. Exits process with message to
+ *  user if cannot write to file.
+ *
+ *  - warning: does not write buffer to disk untile `finalize(withIntermediate:)` is called
+ */
 class FileEmitter: CodeEmitter {
     private let retainIntermediate: Bool
     private let runDeleteBinary: Bool
     private let finalPath: String
     private var code: String = ""
 
+    /**
+     * Initialize a configured FileEmitter
+     *
+     * - parameter filePath: Path to write the final executable to
+     * - parameter retainIntermediate: Leave any intermediate compilation target on disk?
+     * - parameter runDeleteBinary: Immediately execute, and subsequently delete, the resulting executable?
+     */
     init(filePath path: String, retainIntermediate retain: Bool = false, runDeleteBinary runDelete: Bool = false) {
         finalPath = path
         retainIntermediate = retain
