@@ -40,12 +40,8 @@ protocol CodeGenerator: IntermediateBuilder {
 }
 
 extension CodeGenerator {
-    func emit(code: String) {
-        emitter.emit(code: code)
-    }
-
-    func emitLine(code: String) {
-        emit("\(code)\n")
+    func emitLine(code: String = "") {
+        emitter.emit(code: "\(code)\n")
     }
 }
 
@@ -70,7 +66,7 @@ struct SwiftGenerator: CodeGenerator {
         emitLine("func readIn() -> Int {")
         emitLine("if let input = readLine(), intInput = Int(input) { return intInput")
         emitLine("} else { return 0 } }")
-        emit("\n")
+        emitLine()
     }
 
     func footer() {
