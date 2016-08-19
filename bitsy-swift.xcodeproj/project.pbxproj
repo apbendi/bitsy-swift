@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B435CF011D676B8300F3C75C /* SwiftGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B435CF001D676B8300F3C75C /* SwiftGenerator.swift */; };
 		B44ABF4F1D2709010012F25B /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44ABF4E1D2709010012F25B /* main.swift */; };
 		B44ABF561D27098A0012F25B /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44ABF551D27098A0012F25B /* Input.swift */; };
 		B44ABF581D2709D60012F25B /* CharStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44ABF571D2709D60012F25B /* CharStream.swift */; };
@@ -36,6 +37,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B435CF001D676B8300F3C75C /* SwiftGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftGenerator.swift; sourceTree = "<group>"; };
 		B44ABF4B1D2709010012F25B /* bitsy-swift */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "bitsy-swift"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B44ABF4E1D2709010012F25B /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		B44ABF551D27098A0012F25B /* Input.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 				B44ABF5D1D270FFB0012F25B /* Tokenizer.swift */,
 				B44ABF5F1D275F760012F25B /* Parser.swift */,
 				B4C99B281D418469003DDDD0 /* CodeGenerator.swift */,
+				B435CF001D676B8300F3C75C /* SwiftGenerator.swift */,
 				B46B12F11D3595C80037045F /* vendor */,
 			);
 			path = "bitsy-swift";
@@ -185,6 +188,7 @@
 				B44ABF561D27098A0012F25B /* Input.swift in Sources */,
 				B46B12FA1D3886DF0037045F /* ArgumentConfig.swift in Sources */,
 				B46B12F61D3596600037045F /* CommandLine.swift in Sources */,
+				B435CF011D676B8300F3C75C /* SwiftGenerator.swift in Sources */,
 				B4C99B291D418469003DDDD0 /* CodeGenerator.swift in Sources */,
 				B44ABF4F1D2709010012F25B /* main.swift in Sources */,
 				B44ABF601D275F760012F25B /* Parser.swift in Sources */,
