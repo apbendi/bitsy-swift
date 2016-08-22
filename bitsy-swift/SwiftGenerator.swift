@@ -4,6 +4,14 @@ import Foundation
 
 /**
  *  A concrete CodeGenerator which emits Swift code
+ *
+ *  Swift is, perhaps, an odd choice as compilation target for "real" compiler.
+ *  For the sake of learning its a good choice for a couple of reasons:
+ *
+ *     1. It removes the barrier of having to learn some other, lower level language
+ *        like assembly or LLVM-IR in order to understand what's going on
+ *     2. It shares certain semantics with the source language directly, making the
+ *        generated code itself more straightforward to digest
  */
 struct SwiftGenerator: CodeGenerator {
 
