@@ -27,11 +27,10 @@ If you're attending either, be sure to say hello!
 
 This version of BitsySwift has been tested with:
 
- * OS X 10.11 (El Capitan)
+ * OS X/macOS 10.11 (El Capitan) or later
  * [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) 8.0
- * Swift 2.3
+ * Swift 3.0
 
-Swift 3 support is forthcoming. The project should also run fine in macOS Sierra.
 Linux support is currently limited by
 [Swift Foundation](https://github.com/apple/swift-corelibs-foundation) but
 should come eventually.
@@ -77,7 +76,7 @@ run any `.bitsy` file.
 user input, though the binaries themselves run fine.
 Any `bash` experts know why?*
 
-Alternatively, you may directly use the bitsy-swift command line utility
+Alternatively, you may directly use the `bitsy-swift` command line utility
 directly for additional options:
 
 ```bash
