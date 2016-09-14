@@ -168,7 +168,7 @@ private extension Tokenizer {
             commentText += takeOne()
         }
 
-        takeOne() // CommentClose
+        let _ = takeOne() // CommentClose
 
         return Comment(value: commentText)
     }
