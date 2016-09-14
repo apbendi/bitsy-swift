@@ -38,16 +38,16 @@ let ArgumentAttacher: Character = "="
 
 /* An output stream to stderr; used by CommandLine.printUsage(). */
 #if swift(>=3.0)
-  private struct StderrOutputStream: OutputStream {
+  private struct StderrOutputStream: TextOutputStream {
     static let stream = StderrOutputStream()
     func write(_ s: String) {
       fputs(s, stderr)
     }
   }
 #else
-  private struct StderrOutputStream: OutputStream {
+  private struct StderrOutputStream: OutputStreamType {
     static let stream = StderrOutputStream()
-    func write(_ s: String) {
+    func write(s: String) {
       fputs(s, stderr)
     }
   }
@@ -64,11 +64,11 @@ let ArgumentAttacher: Character = "="
  * a `ParseError`. You can then call `printUsage()` to output an automatically-generated usage
  * message.
  */
-open class CommandLine {
-  fileprivate var _arguments: [String]
-  fileprivate var _options: [Option] = [Option]()
-  fileprivate var _maxFlagDescriptionWidth: Int = 0
-  fileprivate var _usedFlags: Set<String> {
+public class CommandLine {
+  private var _arguments: [String]
+  private var _options: [Option] = [Option]()
+  private var _maxFlagDescriptionWidth: Int = 0
+  private var _usedFlags: Set<String> {
     var usedFlags = Set<String>(minimumCapacity: _options.count * 2)
 
     for option in _options {
@@ -102,7 +102,7 @@ open class CommandLine {
    * File type is pdf, files are ["~/file1.pdf", "~/file2.pdf"]
    * ```
    */
-  open fileprivate(set) var unparsedArguments: [String] = [String]()
+  public private(set) var unparsedArguments: [String] = [String]()
 
   /**
    * If supplied, this function will be called when printing usage messages.
@@ -129,7 +129,7 @@ open class CommandLine {
    * - note: Newlines are not appended to the result of this function. If you don't use
    * `defaultFormat()`, be sure to add them before returning.
    */
-  open var formatOutput: ((String, OutputType) -> String)?
+  public var formatOutput: ((String, OutputType) -> String)?
 
   /**
    * The maximum width of all options' `flagDescription` properties; provided for use by
@@ -137,12 +137,12 @@ open class CommandLine {
    *
    * - seealso: `defaultFormat`, `formatOutput`
    */
-  open var maxFlagDescriptionWidth: Int {
+  public var maxFlagDescriptionWidth: Int {
     if _maxFlagDescriptionWidth == 0 {
       #if swift(>=3.0)
         _maxFlagDescriptionWidth = _options.map { $0.flagDescription.characters.count }.sorted().first ?? 0
       #else
-        _maxFlagDescriptionWidth = _options.map { $0.flagDescription.characters.count }.sorted().first ?? 0
+        _maxFlagDescriptionWidth = _options.map { $0.flagDescription.characters.count }.sort().first ?? 0
       #endif
     }
 
@@ -156,21 +156,44 @@ open class CommandLine {
    */
   public enum OutputType {
     /** About text: `Usage: command-example [options]` and the like */
-    case about
+    case About
 
     /** An error message: `Missing required option --extract`  */
-    case error
+    case Error
 
     /** An Option's `flagDescription`: `-h, --help:` */
-    case optionFlag
+    case OptionFlag
 
     /** An Option's help message */
-    case optionHelp
+    case OptionHelp
   }
 
   /** A ParseError is thrown if the `parse()` method fails. */
   #if swift(>=3.0)
     public enum ParseError: Error, CustomStringConvertible {
+      /** Thrown if an unrecognized argument is passed to `parse()` in strict mode */
+      case InvalidArgument(String)
+
+      /** Thrown if the value for an Option is invalid (e.g. a string is passed to an IntOption) */
+      case InvalidValueForOption(Option, [String])
+
+      /** Thrown if an Option with required: true is missing */
+      case MissingRequiredOptions([Option])
+
+      public var description: String {
+        switch self {
+        case let .InvalidArgument(arg):
+          return "Invalid argument: \(arg)"
+        case let .InvalidValueForOption(opt, vals):
+          let vs = vals.joined(separator: ", ")
+          return "Invalid value(s) for option \(opt.flagDescription): \(vs)"
+        case let .MissingRequiredOptions(opts):
+          return "Missing required options: \(opts.map { return $0.flagDescription })"
+        }
+      }
+    }
+  #else
+    public enum ParseError: ErrorType, CustomStringConvertible {
       /** Thrown if an unrecognized argument is passed to `parse()` in strict mode */
       case InvalidArgument(String)
 
@@ -185,38 +208,15 @@ open class CommandLine {
         case let .InvalidArgument(arg):
           return "Invalid argument: \(arg)"
         case let .InvalidValueForOption(opt, vals):
-          let vs = vals.joined(separator: ", ")
+          let vs = vals.joinWithSeparator(", ")
           return "Invalid value(s) for option \(opt.flagDescription): \(vs)"
         case let .MissingRequiredOptions(opts):
           return "Missing required options: \(opts.map { return $0.flagDescription })"
         }
       }
     }
-  #else
-    public enum ParseError: ErrorProtocol, CustomStringConvertible {
-      /** Thrown if an unrecognized argument is passed to `parse()` in strict mode */
-      case invalidArgument(String)
-
-      /** Thrown if the value for an Option is invalid (e.g. a string is passed to an IntOption) */
-      case invalidValueForOption(Option, [String])
-      
-      /** Thrown if an Option with required: true is missing */
-      case missingRequiredOptions([Option])
-      
-      public var description: String {
-        switch self {
-        case let .invalidArgument(arg):
-          return "Invalid argument: \(arg)"
-        case let .invalidValueForOption(opt, vals):
-          let vs = vals.joined(separator: ", ")
-          return "Invalid value(s) for option \(opt.flagDescription): \(vs)"
-        case let .missingRequiredOptions(opts):
-          return "Missing required options: \(opts.map { return $0.flagDescription })"
-        }
-      }
-    }
   #endif
-  
+
   /**
    * Initializes a CommandLine object.
    *
@@ -225,7 +225,7 @@ open class CommandLine {
    *
    * - returns: An initalized CommandLine object.
    */
-  public init(arguments: [String] = Swift.CommandLine.arguments) {
+  public init(arguments: [String] = ProcessInfo.processInfo.arguments) {
     self._arguments = arguments
     
     /* Initialize locale settings from the environment */
@@ -322,7 +322,7 @@ open class CommandLine {
   #else
 
   /* Returns all argument values from flagIndex to the next flag or the end of the argument array. */
-  fileprivate func _getFlagValues(_ flagIndex: Int, _ attachedArg: String? = nil) -> [String] {
+  private func _getFlagValues(flagIndex: Int, _ attachedArg: String? = nil) -> [String] {
     var args: [String] = [String]()
     var skipFlagChecks = false
 
@@ -354,7 +354,7 @@ open class CommandLine {
    *
    * - parameter option: The option to add.
    */
-  open func addOption(_ option: Option) {
+  public func addOption(option: Option) {
     let uf = _usedFlags
     for case let flag? in [option.shortFlag, option.longFlag] {
       assert(!uf.contains(flag), "Flag '\(flag)' already in use")
@@ -369,7 +369,7 @@ open class CommandLine {
    *
    * - parameter options: An array containing the options to add.
    */
-  open func addOptions(_ options: [Option]) {
+  public func addOptions(options: [Option]) {
     for o in options {
       addOption(o)
     }
@@ -380,7 +380,7 @@ open class CommandLine {
    *
    * - parameter options: The options to add.
    */
-  open func addOptions(_ options: Option...) {
+  public func addOptions(options: Option...) {
     for o in options {
       addOption(o)
     }
@@ -391,7 +391,7 @@ open class CommandLine {
    *
    * - parameter options: An array containing the options to set.
    */
-  open func setOptions(_ options: [Option]) {
+  public func setOptions(options: [Option]) {
     _options = [Option]()
     addOptions(options)
   }
@@ -401,7 +401,7 @@ open class CommandLine {
    *
    * - parameter options: The options to set.
    */
-  open func setOptions(_ options: Option...) {
+  public func setOptions(options: Option...) {
     _options = [Option]()
     addOptions(options)
   }
@@ -419,7 +419,7 @@ open class CommandLine {
    *     example, a string is supplied for an IntOption)
    *   - `.MissingRequiredOptions` if a required option isn't present
    */
-  open func parse(_ strict: Bool = false) throws {
+  public func parse(strict: Bool = false) throws {
     var strays = _arguments
 
     /* Nuke executable name */
@@ -428,7 +428,7 @@ open class CommandLine {
     #if swift(>=3.0)
       let argumentsEnumerator = _arguments.enumerated()
     #else
-      let argumentsEnumerator = _arguments.enumerated()
+      let argumentsEnumerator = _arguments.enumerate()
     #endif
     for (idx, arg) in argumentsEnumerator {
       if arg == ArgumentStopper {
@@ -444,7 +444,7 @@ open class CommandLine {
       #if swift(>=3.0)
         let flagWithArg = arg[arg.index(arg.startIndex, offsetBy: skipChars)..<arg.endIndex]
       #else
-        let flagWithArg = arg[arg.characters.index(arg.startIndex, offsetBy: skipChars)..<arg.endIndex]
+        let flagWithArg = arg[arg.startIndex.advancedBy(skipChars)..<arg.endIndex]
       #endif
       
       /* The argument contained nothing but ShortOptionPrefix or LongOptionPrefix */
@@ -461,7 +461,7 @@ open class CommandLine {
       for option in _options where option.flagMatch(flag) {
         let vals = self._getFlagValues(idx, attachedArg)
         guard option.setValue(vals) else {
-          throw ParseError.invalidValueForOption(option, vals)
+          throw ParseError.InvalidValueForOption(option, vals)
         }
 
         var claimedIdx = idx + option.claimedValues
@@ -480,7 +480,7 @@ open class CommandLine {
         #if swift(>=3.0)
           let flagCharactersEnumerator = flag.characters.enumerated()
         #else
-          let flagCharactersEnumerator = flag.characters.enumerated()
+          let flagCharactersEnumerator = flag.characters.enumerate()
         #endif
         for (i, c) in flagCharactersEnumerator {
           for option in _options where option.flagMatch(String(c)) {
@@ -489,7 +489,7 @@ open class CommandLine {
             */
             let vals = (i == flagLength - 1) ? self._getFlagValues(idx, attachedArg) : [String]()
             guard option.setValue(vals) else {
-              throw ParseError.invalidValueForOption(option, vals)
+              throw ParseError.InvalidValueForOption(option, vals)
             }
 
             var claimedIdx = idx + option.claimedValues
@@ -506,14 +506,14 @@ open class CommandLine {
 
       /* Invalid flag */
       guard !strict || flagMatched else {
-        throw ParseError.invalidArgument(arg)
+        throw ParseError.InvalidArgument(arg)
       }
     }
 
     /* Check to see if any required options were not matched */
     let missingOptions = _options.filter { $0.required && !$0.wasSet }
     guard missingOptions.count == 0 else {
-      throw ParseError.missingRequiredOptions(missingOptions)
+      throw ParseError.MissingRequiredOptions(missingOptions)
     }
 
     unparsedArguments = strays.filter { $0 != "" }
@@ -528,15 +528,15 @@ open class CommandLine {
    * - returns: The formatted string.
    * - seealso: `formatOutput`
    */
-  open func defaultFormat(_ s: String, type: OutputType) -> String {
+  public func defaultFormat(s: String, type: OutputType) -> String {
     switch type {
-    case .about:
+    case .About:
       return "\(s)\n"
-    case .error:
+    case .Error:
       return "\(s)\n\n"
-    case .optionFlag:
+    case .OptionFlag:
       return "  \(s.padded(toWidth: maxFlagDescriptionWidth)):\n"
-    case .optionHelp:
+    case .OptionHelp:
       return "      \(s)\n"
     }
   }
@@ -551,7 +551,7 @@ open class CommandLine {
    * - parameter to: An OutputStreamType to write the error message to.
    */
   #if swift(>=3.0)
-    public func printUsage<TargetStream: OutputStream>(_ to: inout TargetStream) {
+    public func printUsage<TargetStream: TextOutputStream>(_ to: inout TargetStream) {
       /* Nil coalescing operator (??) doesn't work on closures :( */
       let format = formatOutput != nil ? formatOutput! : defaultFormat
 
@@ -564,16 +564,16 @@ open class CommandLine {
       }
     }
   #else
-    open func printUsage<TargetStream: OutputStream>(_ to: inout TargetStream) {
+    public func printUsage<TargetStream: OutputStreamType>(inout to: TargetStream) {
       /* Nil coalescing operator (??) doesn't work on closures :( */
       let format = formatOutput != nil ? formatOutput! : defaultFormat
 
       let name = _arguments[0]
-      print(format("Usage: \(name) [options]", .about), terminator: "", to: &to)
+      print(format("Usage: \(name) [options]", .About), terminator: "", toStream: &to)
 
       for opt in _options {
-        print(format(opt.flagDescription, .optionFlag), terminator: "", to: &to)
-        print(format(opt.helpMessage, .optionHelp), terminator: "", to: &to)
+        print(format(opt.flagDescription, .OptionFlag), terminator: "", toStream: &to)
+        print(format(opt.helpMessage, .OptionHelp), terminator: "", toStream: &to)
       }
     }
   #endif
@@ -586,15 +586,15 @@ open class CommandLine {
    * - parameter to: An OutputStreamType to write the error message to.
    */
   #if swift(>=3.0)
-    public func printUsage<TargetStream: OutputStream>(_ error: Error, to: inout TargetStream) {
+    public func printUsage<TargetStream: TextOutputStream>(_ error: Error, to: inout TargetStream) {
       let format = formatOutput != nil ? formatOutput! : defaultFormat
       print(format("\(error)", .Error), terminator: "", to: &to)
       printUsage(&to)
     }
   #else
-    open func printUsage<TargetStream: OutputStream>(_ error: ErrorProtocol, to: inout TargetStream) {
+    public func printUsage<TargetStream: OutputStreamType>(error: ErrorType, inout to: TargetStream) {
       let format = formatOutput != nil ? formatOutput! : defaultFormat
-      print(format("\(error)", .error), terminator: "", to: &to)
+      print(format("\(error)", .Error), terminator: "", toStream: &to)
       printUsage(&to)
     }
   #endif
@@ -611,7 +611,7 @@ open class CommandLine {
       printUsage(error, to: &out)
     }
   #else
-    open func printUsage(_ error: ErrorProtocol) {
+    public func printUsage(error: ErrorType) {
       var out = StderrOutputStream.stream
       printUsage(error, to: &out)
     }
@@ -620,8 +620,8 @@ open class CommandLine {
   /**
    * Prints a usage message.
    */
-  open func printUsage() {
-    let out = StderrOutputStream.stream
-    printUsage(out as! Error)
+  public func printUsage() {
+    var out = StderrOutputStream.stream
+    printUsage(&out)
   }
 }
