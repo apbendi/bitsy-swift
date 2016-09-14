@@ -32,7 +32,7 @@ struct SwiftGenerator: CodeGenerator {
         emitLine("var variables = Variables()")
         emitLine("var stack: [Int] = []")
         emitLine("func readIn() -> Int {")
-        emitLine("if let input = readLine(), intInput = Int(input) { return intInput")
+        emitLine("if let input = readLine(), let intInput = Int(input) { return intInput")
         emitLine("} else { return 0 } }")
         emitLine()
     }
