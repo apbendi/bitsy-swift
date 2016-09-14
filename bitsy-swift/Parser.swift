@@ -106,6 +106,7 @@ private extension Parser {
      * - parameter tokenType: The expected value of the current `Token`s type property
      * - parameter andTerminate: If true, this method will *not* advance the token stream
      */
+    @discardableResult
     func match(tokenType type: TokenType, andTerminate terminate: Bool = false) -> String {
         guard currentToken.type == type else {
             print("[ERROR] Expecting \(type.rawValue) but received \(currentToken.value)")
