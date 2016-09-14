@@ -29,7 +29,7 @@ struct CharStream {
      *  Are there additional characters beyond `current`
      */
     var hasMore: Bool {
-        return <#T##String.CharacterView corresponding to your index##String.CharacterView#>.index(after: index) < string.endIndex
+        return index != string.endIndex
     }
 
     /**
@@ -37,6 +37,6 @@ struct CharStream {
      */
     mutating func advance() {
         guard hasMore else { return }
-        index = <#T##Collection corresponding to your index##Collection#>.index(after: index)
+        index = string.index(after: index)
     }
 }
