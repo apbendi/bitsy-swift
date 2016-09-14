@@ -5,8 +5,8 @@ import Foundation
  * over a String
  */
 struct CharStream {
-    private let string: String
-    private var index: String.CharacterView.Index
+    fileprivate let string: String
+    fileprivate var index: String.CharacterView.Index
 
     /**
      * Initialize a character stream
@@ -29,7 +29,7 @@ struct CharStream {
      *  Are there additional characters beyond `current`
      */
     var hasMore: Bool {
-        return index.successor() < string.endIndex
+        return <#T##String.CharacterView corresponding to your index##String.CharacterView#>.index(after: index) < string.endIndex
     }
 
     /**
@@ -37,6 +37,6 @@ struct CharStream {
      */
     mutating func advance() {
         guard hasMore else { return }
-        index = index.successor()
+        index = <#T##Collection corresponding to your index##Collection#>.index(after: index)
     }
 }

@@ -108,7 +108,7 @@ protocol CodeGenerator: IntermediateBuilder {
      * - parameter type: Execute subsequent code if the state of the register
      *                   matches this condition
      */
-    func startCond(type type: CodeGenCondition)
+    func startCond(type: CodeGenCondition)
 
     /**
      * Emits code defining alternate branch associated with a conditional
@@ -196,7 +196,7 @@ extension CodeGenerator {
     /**
      *  Emit a given line of target language code
      */
-    func emitLine(code: String = "") {
+    func emitLine(_ code: String = "") {
         emitter.emit(code: "\(code)\n")
     }
 

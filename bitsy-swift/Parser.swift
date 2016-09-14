@@ -38,8 +38,8 @@ import Foundation
  *  similiarly follows the "shape" of its expected input, or "grammar."
  */
 class Parser {
-    private let tokens: Tokenizer
-    private let generator: CodeGenerator
+    fileprivate let tokens: Tokenizer
+    fileprivate let generator: CodeGenerator
 
 
     /**
@@ -376,7 +376,7 @@ private extension Token {
 /**
  *  Is this case one of the Bitsy conditionals?
  */
-private func isIf(type type:TokenType) -> Bool {
+private func isIf(type:TokenType) -> Bool {
     return type == .ifP || type == .ifZ || type == .ifN
 }
 

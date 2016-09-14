@@ -42,8 +42,8 @@ private let CommentClose = Character("}")
  *
  */
 class Tokenizer {
-    private var codeStream: CharStream
-    private(set) internal var current: Token = Variable(value: "placeholder")
+    fileprivate var codeStream: CharStream
+    fileprivate(set) internal var current: Token = Variable(value: "placeholder")
 
     /**
      * Are there additional `Tokens` beyond `current`?
@@ -114,7 +114,7 @@ private extension Tokenizer {
             }
         case isOperator:
             let opString = take(matching: isOperator)
-            guard let opChar = opString.characters.first, opToken = Operator(char: opChar) where opString.characters.count == 1 else {
+            guard let opChar = opString.characters.first, let opToken = Operator(char: opChar) , opString.characters.count == 1 else {
                 fatalError("Illegal Operator: \(opString)")
             }
 
@@ -177,14 +177,14 @@ private extension Tokenizer {
 /**
  * Returns true if `char` represents a whitespace in Bitsy
  */
-private func isWhitespace(char: Character) -> Bool {
+private func isWhitespace(_ char: Character) -> Bool {
     return char == "\n" || char == "\t" || char == " "
 }
 
 /**
  * Returns true if `char` is a digit, '0' through '9'
  */
-private func isNumber(char: Character) -> Bool {
+private func isNumber(_ char: Character) -> Bool {
     switch char {
     case "0"..."9":
         return true
@@ -196,7 +196,7 @@ private func isNumber(char: Character) -> Bool {
 /**
  * Returns true if `char` is an open or closed paren character in Bitsy
  */
-private func isParen(char: Character) -> Bool {
+private func isParen(_ char: Character) -> Bool {
     let stringChar = String(char)
     return stringChar == TokenType.leftParen.rawValue ||
             stringChar == TokenType.rightParen.rawValue
@@ -205,7 +205,7 @@ private func isParen(char: Character) -> Bool {
 /**
  * Returns true if `char` is a valid operator character in Bitsy
  */
-private func isOperator(char: Character) -> Bool {
+private func isOperator(_ char: Character) -> Bool {
     return TokenType.operators.map { op in
                 return String(char) == op.rawValue
             }.reduce(false) { acc, doesMatch in
@@ -217,7 +217,7 @@ private func isOperator(char: Character) -> Bool {
  * Returns true if `char` is a valid identifier character in Bitsy,
  * that is, one used for keywords and variable names
  */
-private func isIdent(char: Character) -> Bool {
+private func isIdent(_ char: Character) -> Bool {
     switch char {
     case "a"..."z":
         return true

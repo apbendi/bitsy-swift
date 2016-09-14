@@ -10,7 +10,7 @@ protocol CodeEmitter {
      *
      * - parameter code: The code to append to the buffer
      */
-    func emit(code code: String)
+    func emit(code: String)
 
     /**
      * Finalize the code in the output buffer and perform any further transformations
@@ -29,7 +29,7 @@ protocol CodeEmitter {
  *       or debugging intermediate target
  */
 struct CmdLineEmitter: CodeEmitter {
-    func emit(code code: String) {
+    func emit(code: String) {
         print(code, terminator: "")
     }
 
@@ -46,10 +46,10 @@ struct CmdLineEmitter: CodeEmitter {
  *  - warning: does not write buffer to disk untile `finalize(withIntermediate:)` is called
  */
 class FileEmitter: CodeEmitter {
-    private let retainIntermediate: Bool
-    private let runDeleteBinary: Bool
-    private let finalPath: String
-    private var code: String = ""
+    fileprivate let retainIntermediate: Bool
+    fileprivate let runDeleteBinary: Bool
+    fileprivate let finalPath: String
+    fileprivate var code: String = ""
 
     /**
      * Initialize a configured FileEmitter
@@ -73,7 +73,7 @@ class FileEmitter: CodeEmitter {
         let buildCommand = builder.buildCommand(forFinalPath: finalPath)
 
         do {
-            try code.writeToFile(intermediatePath, atomically: true, encoding: NSUTF8StringEncoding)
+            try code.write(toFile: intermediatePath, atomically: true, encoding: String.Encoding.utf8)
             let swiftcOutput = exec(buildCommand)
             if swiftcOutput != "" {
                 print(swiftcOutput)
@@ -95,7 +95,7 @@ class FileEmitter: CodeEmitter {
         }
     }
 
-    private func delete(filePath filePath:String) {
-        let _ = try? NSFileManager.defaultManager().removeItemAtPath(filePath)
+    fileprivate func delete(filePath:String) {
+        let _ = try? FileManager.default.removeItem(atPath: filePath)
     }
 }

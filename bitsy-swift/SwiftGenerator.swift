@@ -41,8 +41,8 @@ struct SwiftGenerator: CodeGenerator {
         emitLine("\n// End Compiler Output")
     }
 
-    func startCond(type type: CodeGenCondition) {
-        func ifCode(type: CodeGenCondition) -> String {
+    func startCond(type: CodeGenCondition) {
+        func ifCode(_ type: CodeGenCondition) -> String {
             switch type {
             case .positive:
                 return ">"

@@ -76,12 +76,12 @@ private extension ArgumentConfig {
      *  Instantiate a concrete CodeReader based on the CLI input by user.
      *  Exit with message to user if input is invalid or source cannot be read.
      */
-    static func reader(freeArgs freeArgs: [String], cliInput: CounterOption) -> CodeReader {
+    static func reader(freeArgs: [String], cliInput: CounterOption) -> CodeReader {
         if cliInput.value > 0 {
             return CmdLineReader()
         }
 
-        guard let filePath = freeArgs.first where filePath.hasSuffix("bitsy") else {
+        guard let filePath = freeArgs.first , filePath.hasSuffix("bitsy") else {
             print("Please provide a valid .bitsy file for compilation; run -h for more info")
             exit(EX_NOINPUT)
         }
