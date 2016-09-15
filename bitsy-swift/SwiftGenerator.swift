@@ -100,8 +100,8 @@ struct SwiftGenerator: CodeGenerator {
         emitLine("stack.append(register)")
     }
 
-    func pop(andPerform op: CodeGenOperation) {
-        func opCode(forType type:CodeGenOperation) -> String {
+    func pop(andPerform operation: CodeGenOperation) {
+        func operationChar(forType type:CodeGenOperation) -> String {
             switch type {
             case .add:
                 return "+"
@@ -116,7 +116,7 @@ struct SwiftGenerator: CodeGenerator {
             }
         }
 
-        emitLine("register = stack.removeLast() \(opCode(forType: op)) register")
+        emitLine("register = stack.removeLast() \(operationChar(forType: operation)) register")
     }
 
     func negate() {

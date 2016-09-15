@@ -184,7 +184,7 @@ protocol CodeGenerator: IntermediateBuilder {
      *
      * - parameter andPerform: The mathematical operation to perform
      */
-    func pop(andPerform op: CodeGenOperation)
+    func pop(andPerform operation: CodeGenOperation)
 
     /**
      * Reverse the sign of the value in the register

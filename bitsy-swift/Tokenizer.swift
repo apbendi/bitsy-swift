@@ -105,8 +105,8 @@ private extension Tokenizer {
             }
 
             return parenToken
-        case isIdent:
-            let ident = take(matching: isIdent)
+        case isIdentifier:
+            let ident = take(matching: isIdentifier)
             if let key = Keyword(string: ident) {
                 return key
             } else {
@@ -217,7 +217,7 @@ private func isOperator(_ char: Character) -> Bool {
  * Returns true if `char` is a valid identifier character in Bitsy,
  * that is, one used for keywords and variable names
  */
-private func isIdent(_ char: Character) -> Bool {
+private func isIdentifier(_ char: Character) -> Bool {
     switch char {
     case "a"..."z":
         return true
