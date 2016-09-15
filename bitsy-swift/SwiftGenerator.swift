@@ -3,9 +3,9 @@ import Foundation
 // MARK: CodeGenerator
 
 /**
- *  A concrete CodeGenerator which emits Swift code
+ *  A concrete CodeGenerator which emits Swift
  *
- *  Swift is, perhaps, an odd choice as compilation target for "real" compiler.
+ *  Swift is, perhaps, an odd choice as a compilation target for "real" compiler.
  *  For the sake of learning its a good choice for a couple of reasons:
  *
  *     1. It removes the barrier of having to learn some other, lower level language

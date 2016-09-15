@@ -17,7 +17,7 @@ protocol CodeEmitter {
      * to the compilation target to produce a binary
      *
      * - parameter withIntermediate: Concrete builder for performing any external build step
-     *   require by a given compilation target language
+     *   required by a given compilation target language
      */
     func finalize(withIntermediate builder: IntermediateBuilder)
 }
@@ -43,7 +43,7 @@ struct CmdLineEmitter: CodeEmitter {
  *  intermediate target unless instructed otherwise. Exits process with message to
  *  user if cannot write to file.
  *
- *  - warning: does not write buffer to disk untile `finalize(withIntermediate:)` is called
+ *  - warning: does not write buffer to disk until `finalize(withIntermediate:)` is called
  */
 class FileEmitter: CodeEmitter {
     fileprivate let retainIntermediate: Bool

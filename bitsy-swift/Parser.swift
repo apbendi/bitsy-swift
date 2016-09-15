@@ -21,7 +21,7 @@ import Foundation
  *  checking, and ultimately code generation. For learning and getting started, a single pass
  *  is sufficient!
  *
- *  This `Parser`implements an algorithm called "Recursive Descent." Recursive
+ *  This `Parser` implements an algorithm called "Recursive Descent." Recursive
  *  Descent parsers consist of a series of mutually recursive functions for each "production",
  *  or component of the source language. For example:
  *
@@ -34,8 +34,8 @@ import Foundation
  *  is to dispatch to other parsing functions. Other parsing functions consume the `Token`s which
  *  are expected in their productions, calling others where needed. For example, since the 
  *  `PRINT` statement must be follwed by an expression to output, the `doPrint()` function
- *  consumes a `.print` `Keyword` `Token` and calls `expression()`. Each function
- *  similiarly follows the "shape" of its expected input, or "grammar."
+ *  consumes a `.print` `Keyword` and calls `expression()`. Each function
+ *  similiarly follows the "shape" of its expected input, which is called the "grammar."
  */
 class Parser {
     fileprivate let tokens: Tokenizer
@@ -45,7 +45,7 @@ class Parser {
     /**
      * Create a Parser
      *
-     * - parameter tokens:    The unprocessesd stream of `Tokens` the Parser will inspect
+     * - parameter tokens:    The unprocessesd stream of `Token`s the Parser will inspect
      * - parameter generator: A code generator the `Parser` will use to output code in
      *                        its given target language
      */
@@ -79,12 +79,12 @@ class Parser {
 private extension Parser {
 
     /**
-     * Convenience accessor to the current token of the `Tokenizer`
+     * Convenience accessor to the current `Token`
      */
     var currentToken: Token { return tokens.current }
 
     /**
-     * Advance the token stream to the next non-`Whitespace`, non-`Comment` `Token`
+     * Advance the token stream to the next non-`Whitespace`, non-`Comment` token
      */
     func advanceToken() {
         guard tokens.hasMore else {

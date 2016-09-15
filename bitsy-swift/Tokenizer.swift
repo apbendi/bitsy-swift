@@ -46,7 +46,7 @@ class Tokenizer {
     fileprivate(set) internal var current: Token = Variable(value: "placeholder")
 
     /**
-     * Are there additional `Tokens` beyond `current`?
+     * Are there additional `Token`s beyond `current`?
      */
     var hasMore: Bool { return codeStream.hasMore }
 
@@ -71,13 +71,13 @@ class Tokenizer {
 private extension Tokenizer {
 
     /**
-     * This method is the meat of the tokinization process. The switch statement uses the
+     * This method is the meat of the tokenization process. The switch statement uses the
      * current character to predict the kind of `Token` that will be constructed. It takes all
      * subsequent characters which are legal in this class of `Token` and uses them to create
      * a the appropriate `Token`.
      *
      * In many instances the, the type of Token can be inferred directly from the current character.
-     * In the case of identifiers, `Keyword`s failable initializer is used to distinguish between
+     * In the case of identifiers, the failable `Keyword` initializer is used to distinguish between
      * a keyword and a variable.
      *
      * This method will also cease compilation if an unexpected or illegal character is encountered,
@@ -127,7 +127,7 @@ private extension Tokenizer {
     }
 
     /**
-     *  Advance the code stream by one character, and return it as a String
+     *  Advance the code stream by one character and return it as a String
      */
     func takeOne() -> String {
         let charString = String(codeStream.current)

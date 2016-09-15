@@ -18,9 +18,9 @@ struct ArgumentConfig {
 
     /**
      *  Parse the arguments passed by the user and return
-     *  an instance exposing concrete instances of components needed for
+     *  an exposing concrete instances of components needed for
      *  the compilation process. Exit process with message to user if
-     *  arguments are invalid
+     *  arguments are invalid.
      *
      * - parameter version: The version string to report to the user if requested
      */

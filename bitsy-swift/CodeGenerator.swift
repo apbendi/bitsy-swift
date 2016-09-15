@@ -50,7 +50,7 @@ enum CodeGenOperation {
 // MARK: Branch Conditions
 
 /**
- * The cases, mapping to IFP, IFN, and IFZ in Bitsy
+ * The cases- mapping to IFP, IFN, and IFZ in Bitsy-
  * for which a branch conditional will need to be generated in the compilation target
  */
 enum CodeGenCondition {
@@ -144,8 +144,8 @@ protocol CodeGenerator: IntermediateBuilder {
      * Emits code which pauses to take input from STDIN and loads the integer value
      * into memory addressable by a name
      *
-     * - Note: input other than a stream of digits, optionaly prepended with +/-,
-     *         should be load a value of 0
+     * - Note: input other than a stream of digits, optionally prepended with +/-,
+     *         should load a value of 0
      *
      *  - parameter variableName: The 'address' to load the input
      */
@@ -179,8 +179,8 @@ protocol CodeGenerator: IntermediateBuilder {
     func push()
 
     /**
-     * Pop a value off the top of the stack, perform an operation with that value,
-     * and the register (in that order), and place the result in the register
+     * Pop a value off the top of the stack, perform an operation with that value
+     * and the register (in that order), and place the result back in the register
      *
      * - parameter andPerform: The mathematical operation to perform
      */
