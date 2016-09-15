@@ -6,7 +6,7 @@ language implemented in Swift. It is currently the canonical implementation of B
 ## Bitsy
 
 [Bitsy](https://github.com/apbendi/bitsyspec) is a programming language which
-aims to be the best language to target
+aims to be the best language to implement
 when building your first compiler or interpreter. It is a resource for
 programmers learning about language implementation.
 
@@ -116,9 +116,12 @@ places to start.
    is a great resource by James Kyle- a minimal, extremely well commented compiler
    written in JavaScript. Be sure to also checkout the associated
    [conference talk](https://www.youtube.com/watch?v=Tar4WgAfMr4)
+ * [How to implement a programming language in JavaScript](http://lisperator.net/pltut/)
+   is a slightly more advanced resource which is, for better or worse, also
+   written in JavaScript.
  * [A Nanopass Framework for Compiler Education (PDF)](http://www.cs.indiana.edu/~dyb/pubs/nano-jfp.pdf)
  * [Stanford Compiler Course](https://www.youtube.com/watch?v=sm0QQO-WZlM&list=PLFB9EC7B8FE963EB8)
-   with Alex Aiken; a more advanced resource for learning some theory and going
+   with Alex Aiken; an advanced resource for learning some theory and going
    deeper.
 
 ## Contributing
