@@ -20,7 +20,7 @@ struct CmdLineReader: CodeReader {
         var input = ""
         var line = ""
 
-        while line.characters.first != "." {
+        while line.first != "." {
             input += "\(line)\n"
 
             guard let nextLine = readLine() else {

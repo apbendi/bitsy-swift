@@ -6,7 +6,7 @@ import Foundation
  */
 struct CharStream {
     fileprivate let string: String
-    fileprivate var index: String.CharacterView.Index
+    fileprivate var index: String.Index
 
     /**
      * Initialize a character stream

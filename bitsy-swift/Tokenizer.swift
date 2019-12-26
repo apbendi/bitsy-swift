@@ -114,7 +114,7 @@ private extension Tokenizer {
             }
         case isOperator:
             let opString = take(matching: isOperator)
-            guard let opChar = opString.characters.first, let opToken = Operator(char: opChar) , opString.characters.count == 1 else {
+            guard let opChar = opString.first, let opToken = Operator(char: opChar) , opString.count == 1 else {
                 fatalError("Illegal Operator: \(opString)")
             }
 

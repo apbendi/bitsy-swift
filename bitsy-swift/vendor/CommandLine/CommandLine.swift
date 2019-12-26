@@ -139,11 +139,7 @@ public class CommandLine {
    */
   public var maxFlagDescriptionWidth: Int {
     if _maxFlagDescriptionWidth == 0 {
-      #if swift(>=3.0)
-        _maxFlagDescriptionWidth = _options.map { $0.flagDescription.characters.count }.sorted().first ?? 0
-      #else
-        _maxFlagDescriptionWidth = _options.map { $0.flagDescription.characters.count }.sort().first ?? 0
-      #endif
+        _maxFlagDescriptionWidth = _options.map { $0.flagDescription.count }.sorted().first ?? 0
     }
 
     return _maxFlagDescriptionWidth
@@ -440,7 +436,7 @@ public class CommandLine {
       }
       
       let skipChars = arg.hasPrefix(LongOptionPrefix) ?
-        LongOptionPrefix.characters.count : ShortOptionPrefix.characters.count
+        LongOptionPrefix.count : ShortOptionPrefix.count
       #if swift(>=3.0)
         let flagWithArg = arg[arg.index(arg.startIndex, offsetBy: skipChars)..<arg.endIndex]
       #else
@@ -475,13 +471,11 @@ public class CommandLine {
       }
       
       /* Flags that do not take any arguments can be concatenated */
-      let flagLength = flag.characters.count
+      let flagLength = flag.count
       if !flagMatched && !arg.hasPrefix(LongOptionPrefix) {
-        #if swift(>=3.0)
-          let flagCharactersEnumerator = flag.characters.enumerated()
-        #else
-          let flagCharactersEnumerator = flag.characters.enumerate()
-        #endif
+
+        let flagCharactersEnumerator = flag.enumerated()
+
         for (i, c) in flagCharactersEnumerator {
           for option in _options where option.flagMatch(String(c)) {
             /* Values are allowed at the end of the concatenated flags, e.g.

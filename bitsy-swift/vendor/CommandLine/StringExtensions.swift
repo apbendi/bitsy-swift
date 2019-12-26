@@ -56,11 +56,8 @@ internal extension String {
     var isNegative: Bool = false
     let decimalPoint = self._localDecimalPoint()
 
-    #if swift(>=3.0)
-      let charactersEnumerator = self.characters.enumerated()
-    #else
-      let charactersEnumerator = self.characters.enumerated()
-    #endif
+    let charactersEnumerator = self.enumerated()
+
     for (i, c) in charactersEnumerator {
       if i == 0 && c == "-" {
         isNegative = true
@@ -85,7 +82,7 @@ internal extension String {
     }
 
     return (Double(Int(characteristic)!) +
-      Double(Int(mantissa)!) / pow(Double(10), Double(mantissa.characters.count - 1))) *
+      Double(Int(mantissa)!) / pow(Double(10), Double(mantissa.count - 1))) *
       (isNegative ? -1 : 1)
   }
 
@@ -103,7 +100,7 @@ internal extension String {
     var numSplits = 0
 
     var curIdx = self.startIndex
-    for i in self.characters.indices {
+    for i in self.indices {
       let c = self[i]
       if c == by && (maxSplits == 0 || numSplits < maxSplits) {
         s.append(String(self[curIdx..<i]))
@@ -162,7 +159,7 @@ internal extension String {
    */
   func padded(toWidth width: Int, with padChar: Character = " ") -> String {
     var s = self
-    var currentLength = self.characters.count
+    var currentLength = self.count
 
     while currentLength < width {
       s.append(padChar)
@@ -190,7 +187,7 @@ internal extension String {
     var currentLineWidth = 0
 
     for word in self.split(by: splitBy) {
-      let wordLength = word.characters.count
+      let wordLength = word.count
 
       if currentLineWidth + wordLength + 1 > width {
         /* Word length is greater than line length, can't wrap */
