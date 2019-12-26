@@ -19,83 +19,73 @@
  * The base class for a command-line option.
  */
 open class Option {
-  public let shortFlag: String?
-  public let longFlag: String?
-  public let required: Bool
-  public let helpMessage: String
-  
-  /** True if the option was set when parsing command-line arguments */
-  open var wasSet: Bool {
-    return false
-  }
+    public let shortFlag: String?
+    public let longFlag: String?
+    public let required: Bool
+    public let helpMessage: String
 
-  open var claimedValues: Int { return 0 }
-
-  open var flagDescription: String {
-    switch (shortFlag, longFlag) {
-    case let (sf?, lf?):
-      return "\(ShortOptionPrefix)\(sf), \(LongOptionPrefix)\(lf)"
-    case (nil, let lf?):
-      return "\(LongOptionPrefix)\(lf)"
-    case (let sf?, nil):
-      return "\(ShortOptionPrefix)\(sf)"
-    default:
-      return ""
+    /** True if the option was set when parsing command-line arguments */
+    open var wasSet: Bool {
+        return false
     }
-  }
 
-  fileprivate init(_ shortFlag: String?, _ longFlag: String?, _ required: Bool, _ helpMessage: String) {
-    if let sf = shortFlag {
-      assert(sf.count == 1, "Short flag must be a single character")
-      assert(Int(sf) == nil && sf.toDouble() == nil, "Short flag cannot be a numeric value")
-    }
-    
-    if let lf = longFlag {
-      assert(Int(lf) == nil && lf.toDouble() == nil, "Long flag cannot be a numeric value")
-    }
-    
-    self.shortFlag = shortFlag
-    self.longFlag = longFlag
-    self.helpMessage = helpMessage
-    self.required = required
-  }
-  
-  /* The optional casts in these initalizers force them to call the private initializer. Without
-   * the casts, they recursively call themselves.
-   */
-  
-  /** Initializes a new Option that has both long and short flags. */
-  public convenience init(shortFlag: String, longFlag: String, required: Bool = false, helpMessage: String) {
-    self.init(shortFlag as String?, longFlag, required, helpMessage)
-  }
-  
-  /** Initializes a new Option that has only a short flag. */
-  public convenience init(shortFlag: String, required: Bool = false, helpMessage: String) {
-    self.init(shortFlag as String?, nil, required, helpMessage)
-  }
-  
-  /** Initializes a new Option that has only a long flag. */
-  public convenience init(longFlag: String, required: Bool = false, helpMessage: String) {
-    self.init(nil, longFlag as String?, required, helpMessage)
-  }
+    open var claimedValues: Int { return 0 }
 
-  #if swift(>=3.0)
-  func flagMatch(_ flag: String) -> Bool {
-    return flag == shortFlag || flag == longFlag
-  }
-  
-  func setValue(_ values: [String]) -> Bool {
-    return false
-  }
-  #else
-  func flagMatch(_ flag: String) -> Bool {
-    return flag == shortFlag || flag == longFlag
-  }
-  
-  func setValue(_ values: [String]) -> Bool {
-    return false
-  }
-  #endif
+    open var flagDescription: String {
+        switch (shortFlag, longFlag) {
+        case let (sf?, lf?):
+            return "\(ShortOptionPrefix)\(sf), \(LongOptionPrefix)\(lf)"
+        case (nil, let lf?):
+            return "\(LongOptionPrefix)\(lf)"
+        case (let sf?, nil):
+            return "\(ShortOptionPrefix)\(sf)"
+        default:
+            return ""
+        }
+    }
+
+    fileprivate init(_ shortFlag: String?, _ longFlag: String?, _ required: Bool, _ helpMessage: String) {
+        if let sf = shortFlag {
+            assert(sf.count == 1, "Short flag must be a single character")
+            assert(Int(sf) == nil && sf.toDouble() == nil, "Short flag cannot be a numeric value")
+        }
+
+        if let lf = longFlag {
+            assert(Int(lf) == nil && lf.toDouble() == nil, "Long flag cannot be a numeric value")
+        }
+
+        self.shortFlag = shortFlag
+        self.longFlag = longFlag
+        self.helpMessage = helpMessage
+        self.required = required
+    }
+
+    /* The optional casts in these initalizers force them to call the private initializer. Without
+     * the casts, they recursively call themselves.
+     */
+
+    /** Initializes a new Option that has both long and short flags. */
+    public convenience init(shortFlag: String, longFlag: String, required: Bool = false, helpMessage: String) {
+        self.init(shortFlag as String?, longFlag, required, helpMessage)
+    }
+
+    /** Initializes a new Option that has only a short flag. */
+    public convenience init(shortFlag: String, required: Bool = false, helpMessage: String) {
+        self.init(shortFlag as String?, nil, required, helpMessage)
+    }
+
+    /** Initializes a new Option that has only a long flag. */
+    public convenience init(longFlag: String, required: Bool = false, helpMessage: String) {
+        self.init(nil, longFlag as String?, required, helpMessage)
+    }
+
+    func flagMatch(_ flag: String) -> Bool {
+        return flag == shortFlag || flag == longFlag
+    }
+
+    func setValue(_ values: [String]) -> Bool {
+        return false
+    }
 }
 
 /**
@@ -103,72 +93,50 @@ open class Option {
  * absence of the flag(s) is equivalent to false.
  */
 open class BoolOption: Option {
-  fileprivate var _value: Bool = false
-  
-  open var value: Bool {
-    return _value
-  }
+    fileprivate var _value: Bool = false
 
-  override open var wasSet: Bool {
-    return _value
-  }
+    open var value: Bool {
+        return _value
+    }
 
-  #if swift(>=3.0)
-  override func setValue(_ values: [String]) -> Bool {
-    _value = true
-    return true
-  }
-  #else
-  override func setValue(_ values: [String]) -> Bool {
-    _value = true
-    return true
-  }
-  #endif
+    override open var wasSet: Bool {
+        return _value
+    }
+
+    override func setValue(_ values: [String]) -> Bool {
+        _value = true
+        return true
+    }
 }
 
 /**  An option that accepts a positive or negative integer value. */
 open class IntOption: Option {
-  fileprivate var _value: Int?
-  
-  open var value: Int? {
-    return _value
-  }
-  
-  override open var wasSet: Bool {
-    return _value != nil
-  }
+    fileprivate var _value: Int?
 
-  override open var claimedValues: Int {
-    return _value != nil ? 1 : 0
-  }
-
-  #if swift(>=3.0)
-  override func setValue(_ values: [String]) -> Bool {
-    if values.count == 0 {
-      return false
+    open var value: Int? {
+        return _value
     }
 
-    if let val = Int(values[0]) {
-      _value = val
-      return true
+    override open var wasSet: Bool {
+        return _value != nil
     }
 
-    return false
-  }
-  #else
-  override func setValue(_ values: [String]) -> Bool {
-    if values.count == 0 {
-      return false
+    override open var claimedValues: Int {
+        return _value != nil ? 1 : 0
     }
-    
-    if let val = Int(values[0]) {
-      _value = val
-      return true
+
+    override func setValue(_ values: [String]) -> Bool {
+        if values.count == 0 {
+            return false
+        }
+
+        if let val = Int(values[0]) {
+            _value = val
+            return true
+        }
+
+        return false
     }
-    
-    return false
-  }
-  #endif
 }
 
 /**
@@ -176,235 +144,160 @@ open class IntOption: Option {
  * on the command-line, the counter will be incremented.
  */
 open class CounterOption: Option {
-  fileprivate var _value: Int = 0
-  
-  open var value: Int {
-    return _value
-  }
-  
-  override open var wasSet: Bool {
-    return _value > 0
-  }
+    fileprivate var _value: Int = 0
 
-  open func reset() {
-    _value = 0
-  }
+    open var value: Int {
+        return _value
+    }
 
-  #if swift(>=3.0)
-  override func setValue(_ values: [String]) -> Bool {
-    _value += 1
-    return true
-  }
-  #else
-  override func setValue(_ values: [String]) -> Bool {
-    _value += 1
-    return true
-  }
-  #endif
+    override open var wasSet: Bool {
+        return _value > 0
+    }
+
+    open func reset() {
+        _value = 0
+    }
+
+    override func setValue(_ values: [String]) -> Bool {
+        _value += 1
+        return true
+    }
 }
 
 /**  An option that accepts a positive or negative floating-point value. */
 open class DoubleOption: Option {
-  fileprivate var _value: Double?
-  
-  open var value: Double? {
-    return _value
-  }
+    fileprivate var _value: Double?
 
-  override open var wasSet: Bool {
-    return _value != nil
-  }
-
-  override open var claimedValues: Int {
-    return _value != nil ? 1 : 0
-  }
-
-  #if swift(>=3.0)
-
-  override func setValue(_ values: [String]) -> Bool {
-    if values.count == 0 {
-      return false
+    open var value: Double? {
+        return _value
     }
 
-    if let val = values[0].toDouble() {
-      _value = val
-      return true
+    override open var wasSet: Bool {
+        return _value != nil
     }
 
-    return false
-  }
-
-  #else
-
-  override func setValue(_ values: [String]) -> Bool {
-    if values.count == 0 {
-      return false
+    override open var claimedValues: Int {
+        return _value != nil ? 1 : 0
     }
-    
-    if let val = values[0].toDouble() {
-      _value = val
-      return true
-    }
-    
-    return false
-  }
 
-  #endif
+    override func setValue(_ values: [String]) -> Bool {
+        if values.count == 0 {
+            return false
+        }
+
+        if let val = values[0].toDouble() {
+            _value = val
+            return true
+        }
+
+        return false
+    }
 }
 
 /**  An option that accepts a string value. */
 open class StringOption: Option {
-  fileprivate var _value: String? = nil
-  
-  open var value: String? {
-    return _value
-  }
-  
-  override open var wasSet: Bool {
-    return _value != nil
-  }
+    fileprivate var _value: String? = nil
 
-  override open var claimedValues: Int {
-    return _value != nil ? 1 : 0
-  }
-
-  #if swift(>=3.0)
-
-  override func setValue(_ values: [String]) -> Bool {
-    if values.count == 0 {
-      return false
+    open var value: String? {
+        return _value
     }
 
-    _value = values[0]
-    return true
-  }
-
-  #else
-
-  override func setValue(_ values: [String]) -> Bool {
-    if values.count == 0 {
-      return false
+    override open var wasSet: Bool {
+        return _value != nil
     }
 
-    _value = values[0]
-    return true
-  }
+    override open var claimedValues: Int {
+        return _value != nil ? 1 : 0
+    }
 
-  #endif
+    override func setValue(_ values: [String]) -> Bool {
+        if values.count == 0 {
+            return false
+        }
+
+        _value = values[0]
+        return true
+    }
 }
 
 /**  An option that accepts one or more string values. */
 open class MultiStringOption: Option {
-  fileprivate var _value: [String]?
-  
-  open var value: [String]? {
-    return _value
-  }
-  
-  override open var wasSet: Bool {
-    return _value != nil
-  }
+    fileprivate var _value: [String]?
 
-  override open var claimedValues: Int {
-    if let v = _value {
-      return v.count
+    open var value: [String]? {
+        return _value
     }
 
-    return 0
-  }
-
-  #if swift(>=3.0)
-
-  override func setValue(_ values: [String]) -> Bool {
-    if values.count == 0 {
-      return false
+    override open var wasSet: Bool {
+        return _value != nil
     }
 
-    _value = values
-    return true
-  }
+    override open var claimedValues: Int {
+        if let v = _value {
+            return v.count
+        }
 
-  #else
-
-  override func setValue(_ values: [String]) -> Bool {
-    if values.count == 0 {
-      return false
+        return 0
     }
 
-    _value = values
-    return true
-  }
+    override func setValue(_ values: [String]) -> Bool {
+        if values.count == 0 {
+            return false
+        }
 
-  #endif
+        _value = values
+        return true
+    }
 }
 
 /** An option that represents an enum value. */
 open class EnumOption<T:RawRepresentable>: Option where T.RawValue == String {
-  fileprivate var _value: T?
-  open var value: T? {
-    return _value
-  }
-  
-  override open var wasSet: Bool {
-    return _value != nil
-  }
-
-  override open var claimedValues: Int {
-    return _value != nil ? 1 : 0
-  }
-
-  /* Re-defining the intializers is necessary to make the Swift 2 compiler happy, as
-   * of Xcode 7 beta 2.
-   */
-  
-  fileprivate override init(_ shortFlag: String?, _ longFlag: String?, _ required: Bool, _ helpMessage: String) {
-    super.init(shortFlag, longFlag, required, helpMessage)
-  }
-  
-  /** Initializes a new Option that has both long and short flags. */
-  public convenience init(shortFlag: String, longFlag: String, required: Bool = false, helpMessage: String) {
-    self.init(shortFlag as String?, longFlag, required, helpMessage)
-  }
-  
-  /** Initializes a new Option that has only a short flag. */
-  public convenience init(shortFlag: String, required: Bool = false, helpMessage: String) {
-    self.init(shortFlag as String?, nil, required, helpMessage)
-  }
-  
-  /** Initializes a new Option that has only a long flag. */
-  public convenience init(longFlag: String, required: Bool = false, helpMessage: String) {
-    self.init(nil, longFlag as String?, required, helpMessage)
-  }
-  
-  #if swift(>=3.0)
-
-  override func setValue(_ values: [String]) -> Bool {
-    if values.count == 0 {
-      return false
+    fileprivate var _value: T?
+    open var value: T? {
+        return _value
     }
 
-    if let v = T(rawValue: values[0]) {
-      _value = v
-      return true
+    override open var wasSet: Bool {
+        return _value != nil
     }
 
-    return false
-  }
+    override open var claimedValues: Int {
+        return _value != nil ? 1 : 0
+    }
 
-  #else
+    /* Re-defining the intializers is necessary to make the Swift 2 compiler happy, as
+     * of Xcode 7 beta 2.
+     */
 
-  override func setValue(_ values: [String]) -> Bool {
-    if values.count == 0 {
-      return false
+    fileprivate override init(_ shortFlag: String?, _ longFlag: String?, _ required: Bool, _ helpMessage: String) {
+        super.init(shortFlag, longFlag, required, helpMessage)
+    }
+
+    /** Initializes a new Option that has both long and short flags. */
+    public convenience init(shortFlag: String, longFlag: String, required: Bool = false, helpMessage: String) {
+        self.init(shortFlag as String?, longFlag, required, helpMessage)
+    }
+
+    /** Initializes a new Option that has only a short flag. */
+    public convenience init(shortFlag: String, required: Bool = false, helpMessage: String) {
+        self.init(shortFlag as String?, nil, required, helpMessage)
+    }
+
+    /** Initializes a new Option that has only a long flag. */
+    public convenience init(longFlag: String, required: Bool = false, helpMessage: String) {
+        self.init(nil, longFlag as String?, required, helpMessage)
     }
     
-    if let v = T(rawValue: values[0]) {
-      _value = v
-      return true
-    }
-    
-    return false
-  }
+    override func setValue(_ values: [String]) -> Bool {
+        if values.count == 0 {
+            return false
+        }
 
-  #endif
+        if let v = T(rawValue: values[0]) {
+            _value = v
+            return true
+        }
+
+        return false
+    }
 }
