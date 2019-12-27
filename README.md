@@ -17,19 +17,16 @@ language, check out the runnable, test based language specification,
 You can read more about the motivation behind creating Bitsy on the
 [ScopeLift Blog](http://www.scopelift.co/blog/introducing-bitsy-the-first-language-youll-implement-yourself).
 
-I'll be speaking about creating Bitsy and implementing it in Swift at
-[360iDev](http://360idev.com/sessions/300-compilers-arent-magic-lets-build-one-swift/)
-and
-[Indie DevStock](http://indiedevstock.com/speakers/ben-difrancesco/).
-If you're attending either, be sure to say hello!
+I spoke about creating Bitsy and implementing it in Swift at several conferences in 2016. You can [watch the talk on YouTube](https://youtu.be/XkjySn0nwzQ).
+
 
 ## Requirements
 
 This version of BitsySwift has been tested with:
 
- * OS X/macOS 10.11 (El Capitan) or later
- * [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) 8.0
- * Swift 3.0
+ * macOS 10.14 (Mojave) or later
+ * [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) 11.3
+ * Swift 5.0
 
 Linux support is currently limited by
 [Swift Foundation](https://github.com/apple/swift-corelibs-foundation) but
