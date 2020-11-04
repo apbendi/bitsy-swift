@@ -25,3 +25,7 @@ bin/
 *~
 *.dat
 *.dep
+
+# Swift Package Manager
+.build/
+.swiftpm/

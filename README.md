@@ -22,21 +22,19 @@ I spoke about creating Bitsy and implementing it in Swift at several conferences
 
 ## Requirements
 
-This version of BitsySwift has been tested with:
+This version of BitsySwift has been tested with
 
- * macOS 10.14 (Mojave) or later
- * [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) 11.3
- * Swift 5.0
+ * macOS 12.3 (Monterey) and Ubuntu 20.04 LTS
+ * Xcode 13.3
+ * Swift 5.6
 
-Linux support is currently limited by
-[Swift Foundation](https://github.com/apple/swift-corelibs-foundation) but
-should come eventually.
+although basically only a Swift toolchain is required to build the project. Thus,
+it may also run perfectly fine on Windows.
 
 ## Installation
 
-To 'install' the compiler, simply clone and build the repository. You must have
-[Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12)
-and the `xcodebuild` utility installed.
+To 'install' BitsySwift, simply clone and build the repository. You must have the
+[Swift compiler](https://swift.org/download/#releases) available in your `PATH`:
 
 ```bash
 git clone https://github.com/apbendi/bitsy-swift.git
